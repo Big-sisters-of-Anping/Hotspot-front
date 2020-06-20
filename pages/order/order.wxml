@@ -1,0 +1,32 @@
+<!--pages/order/order.wxml-->
+<!-- <text>pages/order/order.wxml</text> -->
+
+<!-- <van-cell title="选择预约日期" value="{{ date }}" bind:click="onDisplay" />
+<van-calendar show="{{ show }}" bind:close="onClose" bind:confirm="onConfirm" /> -->
+
+<view class="section">
+  <view class="section__title">日期选择</view>
+  <van-divider class="divider"/>
+  <picker mode="date" value="{{date}}" start="2020-06-01" end="2022-09-01" bindchange="bindDateChange">
+    <view class="picker">
+      当前选择: {{date}}
+    </view>
+    <van-divider />
+  </picker>
+</view>
+<!-- 地点picker to be done -->
+<view wx:for="{{listData}}">
+  <!-- <van-panel title="预约时段" desc="" status="{{order_status}}" use-footer-slot>
+    <view>内容</view>
+    <view slot="footer">
+      <van-button size="small" type="info" bindtap="onclickorder"> 预约 </van-button>
+    </view>
+  </van-panel> -->
+  <!-- for循环默认的小标变量名未index,默认的当前变量名为item -->
+  <view class = "item">
+    <text class = "order_time">时段: {{item.order_time}}</text>
+    <van-button round  wx:if="{{item.order_status == 1}}" class = "order_button" icon="like" type="info"  size="small" bindtap="onclickorder1" data-value="{{index}}">{{button_word}}</van-button>
+    <van-button round wx:elif="{{item.order_status == 0}}" class = "order_button" icon="like" color="#CCCCCC"  size="small" bindtap="onclickorder2" data-value="{{index}}">{{button_word}}</van-button>
+  </view>
+  <van-divider class="divider"/>
+</view>

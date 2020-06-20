@@ -1,0 +1,38 @@
+/* pages/order/order.wxss */
+/* @import "../../lib/weui.wxss"; */
+
+.picker{
+  padding-top: 10rpx;
+  padding-left: 30rpx;
+  background-color: #FFFFFF;
+  /* font-weight: bold; */
+}
+
+.section__title{
+  /* padding: 10rpx; */
+  padding-left: 30rpx;
+  padding-top: 20rpx;
+  background-color: #FFFFFF;
+  font-weight: bold;
+}
+
+.divider{
+  margin-top: 15rpx;
+  margin-bottom: 15rpx;
+
+}
+
+.item{
+  display:"flex";
+  flex-direction: row; 
+}
+
+.order_time{
+  margin-left: 30rpx;
+}
+.order_button{
+  float: right;
+  margin-right: 30rpx;
+  margin-top: -10rpx;
+}
+

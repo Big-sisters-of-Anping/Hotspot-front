@@ -1,0 +1,16 @@
+/**index.wxss**/
+/* .page-body{
+  display: flex;
+
+} */
+.page-section-gap{
+  box-sizing: border-box;
+  padding: 0 30rpx;
+
+}
+.order-cover-view{
+  margin-top: 30rpx;
+  margin-left: 500rpx;
+  width: 200rpx;
+}
+
