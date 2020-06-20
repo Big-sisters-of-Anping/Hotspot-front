@@ -19,7 +19,7 @@ Page({
       // {order_time: "15:00am - 16:00am", order_status: "1"},
       // {order_time: "16:00am - 17:00am", order_status: "0"},
     ],
-    button_word: "预约"
+    button_word:["预约","取消"],
   },
 
   /**
@@ -102,18 +102,29 @@ Page({
     console.log("value "+value);
     //toggle the state of user_order_status, 0 ^ 1 -> 1, 1 ^ 1 -> 0
     console.log(this.data.listData);
-    this.data.listData[value].user_order_status = this.data.listData[value].user_order_status ^ 1;
+    let listdata = this.data.listData;
+    listdata[value].user_order_status = listdata[value].user_order_status ^ 1,
+    //setData cannot get list item directly
+    this.setData({
+       listData : listdata,
+    });
+    // this.data.listData[value].user_order_status = this.data.listData[value].user_order_status ^ 1;
     console.log(this.data.listData[value].user_order_status);
-    if(this.data.listData[value] == "0"){
-      this.data.button_word = "预约";
-    }else{
-      this.data.button_word = "取消";
-    }
+    
     console.log(this.data.button_word);
-    wx.showToast({
-      icon: 'none',
-      title: '预约成功！可在个人中心查看:)',
-    })
+
+    if(listdata[value].user_order_status == "1"){
+      wx.showToast({
+        icon: 'none',
+        title: '预约成功！可在个人中心查看:)',
+      })
+    }else{
+      wx.showToast({
+        icon: 'none',
+        title: '取消预约，涉及个人信用，请谨慎操作:(',
+      })
+    }
+   
   },
   onclickorder2: function(e){
     wx.showToast({

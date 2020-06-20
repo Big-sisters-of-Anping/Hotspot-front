@@ -15,7 +15,7 @@
   </picker>
 </view>
 <!-- 地点picker to be done -->
-<view wx:for="{{listData}}">
+
   <!-- <van-panel title="预约时段" desc="" status="{{order_status}}" use-footer-slot>
     <view>内容</view>
     <view slot="footer">
@@ -23,10 +23,24 @@
     </view>
   </van-panel> -->
   <!-- for循环默认的小标变量名未index,默认的当前变量名为item -->
+  <!-- <view wx:for="{{listData}}">
   <view class = "item">
     <text class = "order_time">时段: {{item.order_time}}</text>
     <van-button round  wx:if="{{item.order_status == 1}}" class = "order_button" icon="like" type="info"  size="small" bindtap="onclickorder1" data-value="{{index}}">{{button_word}}</van-button>
     <van-button round wx:elif="{{item.order_status == 0}}" class = "order_button" icon="like" color="#CCCCCC"  size="small" bindtap="onclickorder2" data-value="{{index}}">{{button_word}}</van-button>
   </view>
   <van-divider class="divider"/>
+</view> -->
+
+  <view class = "item">
+  <block wx:for="{{listData}}">
+    <text class = "order_time">时段: {{item.order_time}}</text>
+      <block wx:if="{{item.order_status == 1}}">
+          <van-button round class = "order_button" icon="like" type="info"  size="small" data-value="{{index}}" bindtap="onclickorder1">{{button_word[item.user_order_status]}}</van-button>
+      </block>
+      <block wx:elif="{{item.order_status == 0}}">
+          <van-button round class = "order_button" icon="like" color="#CCCCCC"  size="small" data-value="{{index}}" bindtap="onclickorder2">{{button_word[item.user_order_status]}}</van-button>
+      </block>
+      <van-divider class="divider"/>
+   </block>   
 </view>
