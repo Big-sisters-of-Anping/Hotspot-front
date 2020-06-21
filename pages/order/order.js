@@ -6,20 +6,23 @@ Page({
    */
   data: {
     date: '2020-08-01',
+    placeIndex: '1',
     listData : [
       // order_status: 0 stands for can not be ordered, 1 stands for can be ordered
       //user_order_status: 0 stands for haven't not been ordered, 1 stands for have been ordered
-      {order_time: "8:00am - 9:00am", order_status: "1", user_order_status: "0"},
-      {order_time: "9:00am - 10:00am", order_status: "0", user_order_status: "0"},
+      {order_time: "08:00am - 09:00am", order_status: "1", user_order_status: "0"},
+      {order_time: "09:00am - 10:00am", order_status: "0", user_order_status: "0"},
       {order_time: "10:00am - 11:00am", order_status: "0",user_order_status: "0"},
       {order_time: "11:00am - 12:00am", order_status: "1",user_order_status: "0"},
       {order_time: "12:00am - 13:00am", order_status: "1",user_order_status: "0"},
-      // {order_time: "13:00am - 14:00am", order_status: "0"},
+      {order_time: "13:00am - 14:00am", order_status: "0", user_order_status: "0"},
       // {order_time: "14:00am - 15:00am", order_status: "1"},
       // {order_time: "15:00am - 16:00am", order_status: "1"},
       // {order_time: "16:00am - 17:00am", order_status: "0"},
     ],
+    user_order_status_index:"9999",//at most one listData[index].user_order_status = 1 is permitted
     button_word:["预约","取消"],
+    placeArray:["游泳馆","方肇周体育馆","田径场","学生第四餐厅","学生第五餐厅","四组团餐厅" , "杜厦图书馆"],
   },
 
   /**
@@ -94,6 +97,13 @@ Page({
     })
   },
 
+  bindPlaceChange: function(e) {
+    console.log('place picker发送选择改变，携带值为', e.detail)
+    this.setData({
+      placeIndex: e.detail.value
+    })
+  },
+
   //to be done
   onclickorder1: function(e){
     console.log(e);
@@ -102,28 +112,47 @@ Page({
     console.log("value "+value);
     //toggle the state of user_order_status, 0 ^ 1 -> 1, 1 ^ 1 -> 0
     console.log(this.data.listData);
+
+    //cancel the user_oder_status = 0 (at most one item can be selected)
+    if(this.data.user_order_status_index != "9999"){ 
+      let listdata = this.data.listData;
+      listdata[this.data.user_order_status_index].user_order_status = 0;
+    }
+
+    //change the user_order_status of the current item to 1
     let listdata = this.data.listData;
-    listdata[value].user_order_status = listdata[value].user_order_status ^ 1,
+
+    //if last_index != current_index, -> 1, 
+    //otherwise, -> 0 (already set in  if(this.data.user_order_status_index != "9999"))
+    if(this.data.user_order_status_index != value)
+      listdata[value].user_order_status = listdata[value].user_order_status ^ 1;
+
+    if(listdata[value].user_order_status == 0){
+      this.data.user_order_status_index = "9999";
+    } else{
+     this.data.user_order_status_index = value;
+    }
+  
     //setData cannot get list item directly
+    //this.setData should be used to reload the changed data
     this.setData({
        listData : listdata,
     });
-    // this.data.listData[value].user_order_status = this.data.listData[value].user_order_status ^ 1;
+
     console.log(this.data.listData[value].user_order_status);
     
-    console.log(this.data.button_word);
 
-    if(listdata[value].user_order_status == "1"){
-      wx.showToast({
-        icon: 'none',
-        title: '预约成功！可在个人中心查看:)',
-      })
-    }else{
-      wx.showToast({
-        icon: 'none',
-        title: '取消预约，涉及个人信用，请谨慎操作:(',
-      })
-    }
+    // if(listdata[value].user_order_status == "1"){
+    //   wx.showToast({
+    //     icon: 'none',
+    //     title: '预约成功！可在个人中心查看:)',
+    //   })
+    // }else{
+    //   wx.showToast({
+    //     icon: 'none',
+    //     title: '取消预约，涉及个人信用，请谨慎操作:(',
+    //   })
+    // }
    
   },
   onclickorder2: function(e){
@@ -131,6 +160,11 @@ Page({
       title: '此时段不可预约:(',
       icon: 'none'
     })
+  },
+
+  //to be done, submit order
+  onclicksubmit: function(e){
+
   }
 })
 

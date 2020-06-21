@@ -4,17 +4,31 @@
 <!-- <van-cell title="选择预约日期" value="{{ date }}" bind:click="onDisplay" />
 <van-calendar show="{{ show }}" bind:close="onClose" bind:confirm="onConfirm" /> -->
 
+<view class="outter">
+
+<van-divider class="divider"/>
 <view class="section">
-  <view class="section__title">日期选择</view>
-  <van-divider class="divider"/>
+  <!-- <view class="section__title">日期选择</view> -->
+  <!-- <van-divider class="divider"/> -->
   <picker mode="date" value="{{date}}" start="2020-06-01" end="2022-09-01" bindchange="bindDateChange">
     <view class="picker">
-      当前选择: {{date}}
+      日期选择: {{date}}
     </view>
-    <van-divider />
+    <!-- <van-divider /> -->
   </picker>
 </view>
 <!-- 地点picker to be done -->
+<view class="section">
+  <!-- <view class="section__title">地点选择</view> -->
+  <!-- <van-divider class="divider"/> -->
+  <picker mode="selector" value="{{index}}" range="{{placeArray}}" bindchange="bindPlaceChange">
+    <view class="picker">
+      地点选择: {{placeArray[placeIndex]}}
+    </view>
+    <!-- <van-divider /> -->
+    <view class="divLine1"></view>
+  </picker>
+</view>
 
   <!-- <van-panel title="预约时段" desc="" status="{{order_status}}" use-footer-slot>
     <view>内容</view>
@@ -32,7 +46,7 @@
   <van-divider class="divider"/>
 </view> -->
 
-  <view class = "item">
+  <!-- <view class = "item">
   <block wx:for="{{listData}}">
     <text class = "order_time">时段: {{item.order_time}}</text>
       <block wx:if="{{item.order_status == 1}}">
@@ -41,6 +55,38 @@
       <block wx:elif="{{item.order_status == 0}}">
           <van-button round class = "order_button" icon="like" color="#CCCCCC"  size="small" data-value="{{index}}" bindtap="onclickorder2">{{button_word[item.user_order_status]}}</van-button>
       </block>
-      <van-divider class="divider"/>
+       <view class="divLine"></view>
    </block>   
+</view> -->
+
+
+<view class = "item">
+  <block wx:for="{{listData}}">
+    <!-- <text class = "order_time">时段: {{item.order_time}}</text> -->
+      <block wx:if="{{item.order_status == 1}}">
+        <block wx:if="{{item.user_order_status == 0}}">
+            <van-button round plain class = "order_button" type="info"  size="normal" data-value="{{index}}" bindtap="onclickorder1">
+              <text>{{item.order_time}}</text>
+            </van-button>
+        </block>
+        <block wx:else>
+            <van-button round class = "order_button" type="info"  size="normal" data-value="{{index}}" bindtap="onclickorder1">
+              <text>{{item.order_time}}</text>
+            </van-button>
+        </block>
+      
+      </block>
+      <block wx:elif="{{item.order_status == 0}}">
+          <van-button round class = "order_button" color="#CCCCCC"  size="normal" data-value="{{index}}" bindtap="onclickorder2">
+             <text>{{item.order_time}}</text>
+            <!-- <text>{{button_word[item.user_order_status]}}</text> -->
+          </van-button>
+      </block>
+      <!-- <van-divider class="divider"/> -->
+       <view class="divLine"></view>
+   </block>   
+</view>
+
+<van-button class = "submit" type = "info" block bindtap="onclicksubmit">提交</van-button>
+
 </view>
