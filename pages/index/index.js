@@ -2,7 +2,7 @@
 //获取应用实例
 const app = getApp()
 
-Component({
+Page({
   data:{
     //NJU, xianlin campus
     latitude: 32.11914686983188,
@@ -109,19 +109,18 @@ Component({
   ]
   },
 
-  //get tarbar
-  pageLifetimes: {
-    show() {
-      if (typeof this.getTabBar === 'function' &&
-        this.getTabBar()) {
-        this.getTabBar().setData({
-          selected: 0
-        })
-      }
-    }
-  },
+  //get tarbar (use the tabbar provided by weixin to avoid bug...)
+  // pageLifetimes: {
+  //   show() {
+  //     if (typeof this.getTabBar === 'function' &&
+  //       this.getTabBar()) {
+  //       this.getTabBar().setData({
+  //         selected: 0
+  //       })
+  //     }
+  //   }
+  // },
 
-  methods:{
     onReady: function (e) {
       this.mapCtx = wx.createMapContext('myMap')
 
@@ -175,7 +174,7 @@ Component({
 
     onclickmarker: function(e){
       console.log(e);//makerId
-      this.createCallout(e.detail.markerId);
+      // this.createCallout(e.detail.markerId);
     },
 
     getlocation: function(){
@@ -206,5 +205,5 @@ Component({
       })
 
     }
-  }
+  
 })
