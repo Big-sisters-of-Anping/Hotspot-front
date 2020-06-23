@@ -1,6 +1,7 @@
 // pages/discover.js
 
 var util = require('../../utils/util.js');
+var app = getApp();
 
 Page({
 
@@ -19,6 +20,7 @@ Page({
     duration: 1000,
     feed: [],
     feed_length: 0,
+    listSearch : [],
   },
 
   /**
@@ -137,6 +139,35 @@ Page({
         feed: this.data.feed.concat(next_data),
         feed_length: this.data.feed_length + next_data.length
       });
+  },
+
+  //search
+  goSearch : function(e){
+    console.log(e.detail.value);
+    let that = this;
+    wx.request({
+      url: app.globalData.url + "/superadmin/getareabyid",//to be done by wang
+      method: 'GET',
+      data: e.detail.value,
+      headers:{
+        'content-type': 'application/json' // 默认值 
+      },
+      success(res){
+        if(res.data == null){
+          var toastText = "获取数据失败" + res.data.errMsg;
+          wx.showToast({
+            title: toastText,
+            icon: '',
+            duration: 2000
+          });
+        } else {
+          that.setData({
+            listSearch: res.data,
+          });
+          console.log(that.data.listSearch);
+        }
+       }
+    })
   }
 })
 

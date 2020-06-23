@@ -3,9 +3,10 @@
   <view class="search flex-wrp">
       <view class="search-left flex-item">
           <image src="../../images/search.png"></image>
-          <input placeholder="搜索地点" placeholder-class="search-placeholder"/>
+          <input placeholder="搜索地点" placeholder-class="search-placeholder" bindconfirm='goSearch'/>
       </view>
   </view>
+  <!-- <mp-searchbar bindselectresult="selectResult" search="{{search}}"></mp-searchbar> -->
 
    <swiper class="activity" indicator-dots="{{indicatorDots}}"
             autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}">
@@ -26,11 +27,12 @@
           </view>
           <view class="answer-body">
             <view bindtap="bindItemTap">
-              <text class="answer-txt" aid="{{answer_id}}">{{item.answer_ctnt}}</text>
+              <text class="answer-txt">{{item.answer_ctnt}}</text>
             </view>
             <view class="answer-actions" bindtap="bindItemTap">
-              <view class="like dot">
-                <a>{{item.good_num}} 想去 </a>
+              <view class="like ">
+                <a wx:if="{{item.type == 1}}">{{item.good_num}} / {{item.comment_num}} 已预约 </a>
+                <a wx:else>{{item.good_num}} / {{item.comment_num}} 想去 </a>
               </view>
             </view>
           </view>

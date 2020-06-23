@@ -33,9 +33,9 @@ App({
   //     }
   //   })
   // },
-  // globalData: {
-  //   userInfo: null
-  // }
+  globalData: {
+    url: "http://47.104.248.28:8080",
+  },
 
     onLaunch: function () {
   
