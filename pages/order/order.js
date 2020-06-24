@@ -1,4 +1,6 @@
 // pages/order/order.js
+
+var app = getApp();
 Page({
 
   /**
@@ -7,6 +9,7 @@ Page({
   data: {
     date: '2020-08-01',
     placeIndex: '1',
+    //spotOrderTimeList
     listData : [
       // order_status: 0 stands for can not be ordered, 1 stands for can be ordered
       //user_order_status: 0 stands for haven't not been ordered, 1 stands for have been ordered
@@ -23,13 +26,28 @@ Page({
     user_order_status_index:"9999",//at most one listData[index].user_order_status = 1 is permitted
     button_word:["预约","取消"],
     placeArray:["游泳馆","方肇周体育馆","田径场","学生第四餐厅","学生第五餐厅","四组团餐厅" , "杜厦图书馆"],
+    spotList:[],
+    spotOrderTimeList: [],
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    //test /spot/listAllSpots
+    var that = this;
+    wx.request({
+        url: app.globalData.url + "/spot/listAllSpots",
+        method: 'GET',
+        success: (res) =>{
+            console.log(res.data);
+            this.setData({
+              spotList : res.data,
+            }
+            )
+        },
 
+    })
   },
 
   /**
@@ -164,6 +182,61 @@ Page({
 
   //to be done, submit order
   onclicksubmit: function(e){
+      let that = this;
+
+      //if time is selected (valid), send request
+      if(that.data.user_order_status_index != "9999"){
+
+        //get start time and end time from 
+        let dur = that.data.listData[that.data.user_order_status_index].order_time;
+        let arr = dur.split(" - ");
+        console.log("arr "+ arr);
+
+        wx.request({
+          url: app.globalData.url + "/order/addOrder",
+          method: 'POST',
+          data: {
+            "endTime": arr[1],
+            "note": "none",//?
+            "orderDate": that.data.date,
+            // "orderId": 0,//this should be changed by server??
+            // "orderStatus": 0,//it's not necessary
+            "spotId": that.data.placeIndex,
+            "spotName": that.data.placeArray[that.data.placeIndex],
+            "startTime": arr[0],
+            "userId": 0//to be done
+          },
+          headers:{
+            'content-type': 'application/json' // 默认值 
+          },
+          success(res){
+            if(res.data == null){
+              var toastText = "预约失败，请稍后重试" + res.data.errMsg;
+              wx.showToast({
+                title: toastText,
+                icon: '',
+                duration: 2000
+              });
+            } else {
+              console.log(res.data);
+              var toastText = "预约成功！请前往个人中心查看:)";
+              wx.showToast({
+                title: toastText,
+                icon: '',
+                duration: 2000
+              })
+              wx.navigateBack({
+                complete: (res) => {},
+              })
+            }
+           }
+        })
+      } else {
+        wx.showToast({
+          icon: 'none',
+          title: '请选择预约时段:(',
+        })
+      }
 
   }
 })

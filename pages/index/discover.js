@@ -146,9 +146,10 @@ Page({
     console.log(e.detail.value);
     let that = this;
     wx.request({
-      url: app.globalData.url + "/superadmin/getareabyid",//to be done by wang
+      //to be done, just for test currently
+      url: app.globalData.url + "/superadmin/getareabyid?areaId="+e.detail.value,
       method: 'GET',
-      data: e.detail.value,
+      // data: e.detail.value,
       headers:{
         'content-type': 'application/json' // 默认值 
       },
@@ -164,7 +165,7 @@ Page({
           that.setData({
             listSearch: res.data,
           });
-          console.log(that.data.listSearch);
+          console.log("listsearch"+that.data.listSearch);
         }
        }
     })
