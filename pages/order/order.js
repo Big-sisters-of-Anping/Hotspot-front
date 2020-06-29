@@ -37,15 +37,16 @@ Page({
     //test /spot/listAllSpots
     var that = this;
     wx.request({
-        url: app.globalData.url + "/spot/listAllSpots",
+        url: app.globalData.url + "/order/listSpotOrderTime?date=2020-06-29&spotId=1",
         method: 'GET',
         success: (res) =>{
-            console.log(res.data);
-            this.setData({
-              spotList : res.data,
+            // console.log(res.data);
+            that.setData({
+              timeList : res.data,
             }
             )
-        },
+            console.log(that.data.timeList);
+        }
 
     })
   },

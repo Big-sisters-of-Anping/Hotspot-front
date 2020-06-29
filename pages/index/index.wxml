@@ -10,6 +10,7 @@
       longitude="{{longitude}}"
       markers="{{markers}}"
       covers="{{covers}}"
+      wx:if="{{hasMarkers}}"
       show-location
     >
     <cover-view class="order-cover-view">
