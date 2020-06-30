@@ -3,6 +3,7 @@
     "van-divider": "@vant/weapp/divider/index",
     "van-panel": "@vant/weapp/panel/index",
     "van-icon": "@vant/weapp/icon/index",
-    "van-button": "@vant/weapp/button/index"
+    "van-button": "@vant/weapp/button/index",
+    "van-toast": "@vant/weapp/toast/index"
   }
 }

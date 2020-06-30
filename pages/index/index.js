@@ -133,7 +133,7 @@ Page({
               console.log(spotList);
               spotList.forEach(spot => {
                 var currMark = {
-                  "id": spot.spotId,
+                  "id": spot,
                   "latitude": spot.latitude,
                   "longitude": spot.longitude,
                   "name": spot.spotName,
@@ -209,6 +209,16 @@ Page({
     onclickmarker: function(e){
       console.log(e);//makerId
       // this.createCallout(e.detail.markerId);
+    },
+
+    onclickcallout: function(e){
+      //pass information (place)
+      console.log(e);
+      var spotId = Number(e.markerId.spotId) - 1;//spotId >=0, but placeIndex >= 0 
+      var orderBean = JSON.stringify(spotId);
+      wx.navigateTo({
+        url: "/pages/order/order?orderBean=" + orderBean,
+      })
     },
 
     getlocation: function(){
