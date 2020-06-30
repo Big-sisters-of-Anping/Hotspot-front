@@ -8,6 +8,7 @@ Page({
     //NJU, xianlin campus
     latitude: 32.11914686983188,
     longitude: 118.9585018157959,
+    scale: 15,
     markers: [
     // {
     //   id: 1,
@@ -132,18 +133,26 @@ Page({
               var currMarkers = [];
               console.log(spotList);
               spotList.forEach(spot => {
+                var iconPath = "/images/location-green.png";
+                if(spot.realtimePeople == spot.suggestedPeople){
+                  iconPath = "/images/location-red.png";
+                }else if (spot.realtimePeople > spot.suggestedPeople * 0.75){
+                  iconPath = "/images/location-yellow.png";
+                }
                 var currMark = {
                   "id": spot,
                   "latitude": spot.latitude,
                   "longitude": spot.longitude,
                   "name": spot.spotName,
+                  "iconPath": iconPath,
                   "callout": {
                     content: "实时人数/建议人数上限：" + spot.realtimePeople + " / " + spot.suggestedPeople,
                     display: "BYCLICK",
                     borderRadius: 5,
                     borderWidth: 1,
                     bgColor:"#FFFFFF",
-                    padding: 5
+                    padding: 5,
+                    anchorY: 5,   
                   }
                 };
                 currMarkers.push(currMark);
