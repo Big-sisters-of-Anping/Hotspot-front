@@ -2,13 +2,38 @@ const newLocal = wx.getStorageInfoSync;
 // pages/mine/mine.js
 Page({
   data: {
-    userinfo:{}
+    userinfo:{},
+    currentTab: 1
   },
   onShow(){
     const userinfo=wx.getStorageSync("userinfo");
     this.setData({userinfo})
-  } 
+  },
+
+  onclickMyOrder: function(e){
+    console.log(e);
+    wx.navigateTo({
+      //note that absolute path should be used to avoid ERROR
+      url: "/pages/user/myorder",
+      events:{
+        //to be done, get info from pages/order
+      }
+    })
+  },
+  onclickMyWish: function(e){
+    console.log(e);
+    wx.navigateTo({
+      //note that absolute path should be used to avoid ERROR
+      url: "/pages/user/mywish",
+      events:{
+        //to be done, get info from pages/order
+      }
+    })
+  },
 })
+
+//when Myorder button is clicked
+
 
 // Component({
 //   pageLifetimes: {

@@ -3,7 +3,10 @@
     "pages/index/index",
     "pages/index/discover",
     "pages/index/mine",
-    "pages/order/order"
+    "pages/order/order",
+    "pages/testvant/index",
+    "pages/user/myorder",
+    "pages/user/mywish"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -37,8 +40,7 @@
       }
     ]
   },
-  "usingComponents": {
-  },
+  "usingComponents": {},
   "permission": {
     "scope.userLocation": {
       "desc": "你的位置信息将用于行程建议"

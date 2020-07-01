@@ -9,11 +9,14 @@ page{
   .user_img_wrap{
     position: relative;
     .user_bg{
-        height: 50vh;
+        margin-top: -38rpx; 
+        height: 55vh;
+        width: 75vh;
+        margin-left: -30rpx; 
         filter: blur(10px);
     }
     .user_info{
-      position: absolute;
+      position: absolute; 
       left: 50%;
       transform: translateX(-50%);
       top: 20%;
@@ -38,7 +41,7 @@ page{
     border: 1rpx solid greenyellow;
     color: greenyellow;
     font-size: 38rpx;
-    padding: 30rpx;
+    padding: 30rpx; 
     border-radius: 10rpx;
   }
 }
@@ -46,26 +49,60 @@ page{
   position: relative;
   .user_main{
     position: absolute;
-    width: 70%;
+    width: 90%;
     left: 50%; 
     transform: translateX(-50%);
-    top:-40rpx; 
+    top:-60rpx; 
 
     .order_wrap{
       background-color: #fff;
-      display: flex;
-      nevigator{
-        flex: 1;
-        text-align: center;
-        padding: 10rpx 0;
-        .his_num{
-          color: red;
-        }
-        .his_name{}
-        // .iconfont{
-        //   color: red;
-        // }
+      margin-top: 20rpx;
+      
+
+      .user_info{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        padding: 15rpx;
+        border-bottom: 0.5rpx solid #ccc;
       }
+
+      .button_wrap{
+        display: flex;
+        margin: 0 auto;
+        margin-top: 40rpx;
+        margin-bottom: 40rpx;
+        width: 100%;
+        .mini-btn{
+          margin-left: 42rpx;
+          margin-right: 40rpx;
+          margin-bottom: 30rpx;
+        }
+      }
+      
+    }
+    .app_info_wrap{
+      margin-top: 30rpx;
+      background-color: #fff;
+      font-size: small;
+      .app_info_item{
+        color: #6d6d6b;
+        padding: 20rpx;
+        
+      }
+      .app_info_contact{
+        color: #6d6d6b;
+        display: flex;
+        justify-content: space-between;
+        border-bottom:   solid rgb(228, 228, 228);
+      }
+    }
+    .recommend_wrap{ 
+      margin-top: 30rpx;
+      padding: 20rpx;
+      background-color: #fff;
+      color: #6d6d6b;
+      font-size: small;
     }
   }
 

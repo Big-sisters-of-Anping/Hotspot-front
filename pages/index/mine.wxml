@@ -13,6 +13,35 @@
 </view>
 <view class="user_content">
   <view class="user_main">
-    <!-- 123 -->
+    <view class="order_wrap">   
+      <!-- <van-tabs defaultCurrent="tab1">
+        <van-tab key="tab1" title="我的预约"></van-tab>
+        <van-tab key="tab2" title="我的想去"></van-tab>
+      </van-tabs>
+      <view class='ordert-detail'>
+        <view hidden='{{key !=" tab1"}}'>页面1</view>
+        <view hidden='{{key != "tab2"}}'>页面2</view>
+      </view> -->
+
+      <!-- 我的信息  -->
+      <view class="user_info"> 
+        {user info}
+      </view>
+      <!-- 我的预约 -->
+      <view class="button_wrap">
+        <van-button round icon="clock" type="info" class="mini-btn" bindtap="onclickMyOrder">我的预约</van-button>
+        <van-button round icon="like" type="info"  class="mini-btn" bindtap="onclickMyWish">我的想去</van-button>
+      </view>
+    </view>
+    <!-- 应用信息相关 -->
+    <view class="app_info_wrap">
+      <view class="app_info_item app_info_contact">
+        <text>联系我们</text>
+        <text>025-233-6000</text>
+      </view>
+      <view class="app_info_item">关于我们</view>
+    </view>
+    <!-- 推荐 -->
+    <view class="recommend_wrap">分享Hotspot给更多人</view>
   </view>
 </view>

@@ -11,7 +11,10 @@ page {
   position: relative;
 }
 .user_info_wrap .user_img_wrap .user_bg {
-  height: 50vh;
+  margin-top: -38rpx;
+  height: 55vh;
+  width: 75vh;
+  margin-left: -30rpx;
   filter: blur(10px);
 }
 .user_info_wrap .user_img_wrap .user_info {
@@ -47,20 +50,53 @@ page {
 }
 .user_content .user_main {
   position: absolute;
-  width: 70%;
+  width: 90%;
   left: 50%;
   transform: translateX(-50%);
-  top: -40rpx;
+  top: -60rpx;
 }
 .user_content .user_main .order_wrap {
   background-color: #fff;
+  margin-top: 20rpx;
+}
+.user_content .user_main .order_wrap .user_info {
   display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15rpx;
+  border-bottom: 0.5rpx solid #ccc;
 }
-.user_content .user_main .order_wrap nevigator {
-  flex: 1;
-  text-align: center;
-  padding: 10rpx 0;
+.user_content .user_main .order_wrap .button_wrap {
+  display: flex;
+  margin: 0 auto;
+  margin-top: 40rpx;
+  margin-bottom: 40rpx;
+  width: 100%;
 }
-.user_content .user_main .order_wrap nevigator .his_num {
-  color: red;
+.user_content .user_main .order_wrap .button_wrap .mini-btn {
+  margin-left: 42rpx;
+  margin-right: 40rpx;
+  margin-bottom: 30rpx;
+}
+.user_content .user_main .app_info_wrap {
+  margin-top: 30rpx;
+  background-color: #fff;
+  font-size: small;
+}
+.user_content .user_main .app_info_wrap .app_info_item {
+  color: #6d6d6b;
+  padding: 20rpx;
+}
+.user_content .user_main .app_info_wrap .app_info_contact {
+  color: #6d6d6b;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: solid #e4e4e4;
+}
+.user_content .user_main .recommend_wrap {
+  margin-top: 30rpx;
+  padding: 20rpx;
+  background-color: #fff;
+  color: #6d6d6b;
+  font-size: small;
 }
