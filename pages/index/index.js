@@ -130,8 +130,8 @@ Page({
           success: (res) =>{
               // console.log(res.data);
               var spotList = res.data;
+              app.globalData.spotList = spotList;
               var currMarkers = [];
-              console.log(spotList);
               spotList.forEach(spot => {
                 var iconPath = "/images/location-green.png";
                 if(spot.realtimePeople == spot.suggestedPeople){
@@ -146,7 +146,7 @@ Page({
                   "name": spot.spotName,
                   "iconPath": iconPath,
                   "callout": {
-                    content: "实时人数/建议人数上限：" + spot.realtimePeople + " / " + spot.suggestedPeople,
+                    content: spot.spotName + "\n实时人数/建议人数上限：" + spot.realtimePeople + " / " + spot.suggestedPeople,
                     display: "BYCLICK",
                     borderRadius: 5,
                     borderWidth: 1,
