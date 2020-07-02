@@ -14,7 +14,7 @@ Page({
     console.log(e);
     wx.navigateTo({
       //note that absolute path should be used to avoid ERROR
-      url: "/pages/user/myorder",
+      url: "/pages/user/myorder?uid={{user_id}}",
       events:{
         //to be done, get info from pages/order
       }
@@ -30,6 +30,12 @@ Page({
       }
     })
   },
+  handleGetUserInfo(e){
+    // console.log(e); 
+    const {userInfo}=e.detail;
+    wx.setStorageSync('userinfo', userInfo);
+    this.onShow()
+  }
 })
 
 //when Myorder button is clicked

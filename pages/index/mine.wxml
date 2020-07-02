@@ -7,12 +7,16 @@
       <view class="user_name">{{userinfo.nickName}}</view>
     </view>
   </view>
-  <view wx:else class="user_btn">
-    <navigator url="../login/index">登陆</navigator>
+  <view wx:else class="login_img_wrap">
+    <image class="login_bg" src='../../images/login_bg.jpg'></image>
+    <view class="login_info">
+      <cover-view class="login_name">登录将获得你的公开信息（昵称、头像等）</cover-view>
+    </view>
   </view>
+  
 </view>
 <view class="user_content">
-  <view class="user_main">
+  <view wx:if="{{userinfo.avatarUrl}}" class="user_main">
     <view class="order_wrap">   
       <!-- <van-tabs defaultCurrent="tab1">
         <van-tab key="tab1" title="我的预约"></van-tab>
@@ -29,7 +33,9 @@
       </view>
       <!-- 我的预约 -->
       <view class="button_wrap">
-        <van-button round icon="clock" type="info" class="mini-btn" bindtap="onclickMyOrder">我的预约</van-button>
+        <van-button round icon="clock" type="info" class="mini-btn" bindtap="onclickMyOrder">
+        我的预约
+        </van-button>
         <van-button round icon="like" type="info"  class="mini-btn" bindtap="onclickMyWish">我的想去</van-button>
       </view>
     </view>
@@ -43,5 +49,12 @@
     </view>
     <!-- 推荐 -->
     <view class="recommend_wrap">分享Hotspot给更多人</view>
+  </view>
+  <view wx:else class="user_btn">
+    <!-- <navigator url="../login/index">登陆</navigator> -->
+    <button type="primary" open-type ="getUserInfo" bindgetuserinfo="handleGetUserInfo" class='btn1'> 
+      <image class='btnImg' src='../../images/mine_fill_white.png'></image>
+      <view>微信登录</view>
+    </button>
   </view>
 </view>
