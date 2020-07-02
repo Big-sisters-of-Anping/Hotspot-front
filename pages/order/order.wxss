@@ -1,18 +1,30 @@
 /* pages/order/order.wxss */
 /* @import "../../lib/weui.wxss"; */
+.outter{
+  min-height: 100%;
+}
 
-.section{
+.outter .section{
+  margin-bottom: 20rpx;
   padding-bottom: 10rpx;
+  margin-left: 30rpx;
+}
+.outter .section-date{
+  margin-bottom: 20rpx;
+  padding-bottom: 10rpx;
+  margin-left: 30rpx;
+  margin-top: 30rpx;
 }
 
 .picker{
   padding-top: 10rpx;
-  padding-left: 30rpx;
+  padding-left: 45rpx;
   background-color: #FFFFFF;
   /* font-weight: bold; */
 }
 
-.section__title{
+/* section__title is not used now */
+.outter .section .section__title{
   /* padding: 10rpx; */
   padding-left: 30rpx;
   padding-top: 20rpx;
@@ -28,37 +40,43 @@
 }
 
 .divLine1{
+  display: inline-block;
   background: rgb(230, 229, 229);
-  width: 100%;
-  height: 25rpx;
-  margin-top: 15rpx;
-  margin-bottom: 15rpx;
+  width: 90%;
+  height: 3rpx;
+  margin: 30rpx, 30rpx, 30rpx;
+  margin-left: 30rpx;
  }
 
-.item{
+.outter .item{
   display:"flex";
   flex-direction: row; 
-  justify-content: space-around;
+  /* justify-content: space-around; */
+  margin-top: 30rpx;
+  margin-left: 5rpx;
 
 }
 
-.order_time{
+/* is not used now  */
+.outter .order_time{
   margin-left: 30rpx;
 }
-.order_button{
+
+.outter .item .order_button{
   /* float: right;
   margin-right: 30rpx; */
   margin-bottom: 20rpx;
-  margin-left: 80rpx;
+  margin-left: 75rpx;
+  margin-right: 55rpx;
   float: left;
   line-height: 100rpx;
 }
 
-.submit{
-  margin:0;
+.outter .submit-view .submit{
+  display: inline-block;
+  margin:50rpx 70rpx 30rpx;
+  width: 80%;
+  border-radius: 25rpx;
 }
 
-/* why un-useful... */
-.outter{
-  min-height: 100%;
-}
+

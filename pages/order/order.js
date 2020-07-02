@@ -20,6 +20,8 @@ Page({
       {order_time: "10:00 - 12:00", order_status: "1", time_status : "0", user_order_status: "0"},
       {order_time: "14:00 - 16:00", order_status: "1",time_status : "0", user_order_status: "0"},
       {order_time: "16:00 - 18:00", order_status: "1",time_status : "0", user_order_status: "0"},
+      {order_time: "18:00 - 20:00", order_status: "1",time_status : "0", user_order_status: "0"},
+      {order_time: "20:00 - 22:00", order_status: "1",time_status : "0", user_order_status: "0"}
     ],
     user_order_status_index:"9999",//at most one listData[index].user_order_status = 1 is permitted
     button_word:["预约","取消"],
@@ -27,6 +29,7 @@ Page({
     placeArray:["南京大学游泳馆","方肇周体育馆","田径场","学生第四餐厅","学生第五餐厅","四组团餐厅" , "杜厦图书馆"],//get spotName
     spotList:[],
     spotOrderTimeList: [],//correpsonding orderlist for the chosen spot
+    submit_type : "预约",//
   },
   /**
    * 生命周期函数--监听页面加载
@@ -312,7 +315,7 @@ Page({
         //   icon: 'none',
         //   title: '请选择预约时段:(',
         // })
-        var toastText = "预约失败:(";
+        var toastText = "请选择时段";
         Toast.fail(toastText);
 
       }
