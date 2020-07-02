@@ -1,4 +1,5 @@
 // pages/discover.js
+import Toast from '@vant/weapp/toast/toast';
 
 var util = require('../../utils/util.js');
 var app = getApp();
@@ -10,9 +11,9 @@ Page({
    */
   data: {
     imgUrls: [
-      '../../images/a.jpg',
-      '../../images/b.jpg',
-      '../../images/c.jpg'
+      '../../images/IMG_1902.JPG',
+      '../../images/IMG_tower.JPG',
+      '../../images/IMG_CS1.JPG',
     ],
     indicatorDots: false,
     autoplay: true,
@@ -20,7 +21,7 @@ Page({
     duration: 1000,
     feed: [],
     feed_length: 0,
-    listSearch : [],
+    // listSearch : [],
   },
 
   /**
@@ -147,7 +148,7 @@ Page({
     let that = this;
     wx.request({
       //to be done, just for test currently
-      url: app.globalData.url + "/superadmin/getareabyid?areaId="+e.detail.value,
+      url: app.globalData.url + "/search/searchSpotsByName?spotName="+e.detail.value,
       method: 'GET',
       // data: e.detail.value,
       headers:{
@@ -155,17 +156,21 @@ Page({
       },
       success(res){
         if(res.data == null){
-          var toastText = "获取数据失败" + res.data.errMsg;
-          wx.showToast({
-            title: toastText,
-            icon: '',
-            duration: 2000
-          });
+          console.log(res.data.errMsg);
+          var toastText = "获取数据失败";
+          // wx.showToast({
+          //   title: toastText,
+          //   icon: '',
+          //   duration: 2000
+          // });
+          Toast.fail(toastText);
         } else {
-          that.setData({
-            listSearch: res.data,
-          });
-          console.log("listsearch"+that.data.listSearch);
+          //navigate to search page
+          console.log(res.data);
+          var searchBean = JSON.stringify(res.data);
+          wx.navigateTo({
+            url: '/pages/search/search?searchBean=' + searchBean,
+          })
         }
        }
     })

@@ -1,6 +1,7 @@
 // pages/order/order.js
 import Toast from '@vant/weapp/toast/toast';
 
+var util = require('../../utils/util.js');
 var app = getApp();
 Page({
 
@@ -9,22 +10,24 @@ Page({
    */
   data: {
     date: '2020-08-01',
+    startDate : '2020-08-01',//used to set the start time of picker
     //spotOrderTimeList
     listData : [
       // order_status: 0 stands for can not be ordered, 1 stands for can be ordered
       //user_order_status: 0 stands for haven't not been ordered, 1 stands for have been ordered
-      {order_time: "08:00 - 10:00", order_status: "1", user_order_status: "0"},
-      {order_time: "10:00 - 12:00", order_status: "1", user_order_status: "0"},
-      {order_time: "14:00 - 16:00", order_status: "1",user_order_status: "0"},
-      {order_time: "16:00 - 18:00", order_status: "1",user_order_status: "0"},
+      //time_status: 0 stands for currentTime < selectedTime; 1 stands for currentTime >= selectedTime (consider date)
+      {order_time: "08:00 - 10:00", order_status: "1", time_status : "0", user_order_status: "0"},
+      {order_time: "10:00 - 12:00", order_status: "1", time_status : "0", user_order_status: "0"},
+      {order_time: "14:00 - 16:00", order_status: "1",time_status : "0", user_order_status: "0"},
+      {order_time: "16:00 - 18:00", order_status: "1",time_status : "0", user_order_status: "0"},
       // {order_time: "14:00am - 15:00am", order_status: "1"},
       // {order_time: "15:00am - 16:00am", order_status: "1"},
       // {order_time: "16:00am - 17:00am", order_status: "0"},
     ],
     user_order_status_index:"9999",//at most one listData[index].user_order_status = 1 is permitted
     button_word:["预约","取消"],
-    placeIndex: '0',
-    placeArray:["游泳馆","方肇周体育馆","田径场","学生第四餐厅","学生第五餐厅","四组团餐厅" , "杜厦图书馆"],
+    placeIndex: '0',//spotId
+    placeArray:["南京大学游泳馆","方肇周体育馆","田径场","学生第四餐厅","学生第五餐厅","四组团餐厅" , "杜厦图书馆"],//get spotName
     spotList:[],
     spotOrderTimeList: [],//correpsonding orderlist for the chosen spot
   },
@@ -35,7 +38,7 @@ Page({
     //test /spot/listAllSpots
     var that = this;
 
-    console.log("test");
+    //jump from callout
     if(options.orderBean != null){
       var orderBean = JSON.parse(options.orderBean);
         console.log(orderBean);
@@ -44,6 +47,10 @@ Page({
         })
     }
     
+    //set date to the current date & check current time
+    that.setDate();//it is only used when onLoad
+    that.checkTime();
+
     wx.request({
         //url: app.globalData.url + "/order/listSpotOrderTime?date=2020-06-29&spotId=1",
         url: app.globalData.url + "/spot/listAllSpots",
@@ -54,7 +61,23 @@ Page({
               spotList : res.data,
             }
             )
+            console.log("spotList");
             console.log(that.data.spotList);
+            //set placeArray
+            if(that.data.spotList.length > 0){
+                var tmpPlaceArray = new Array(that.data.spotList.length);
+                //place[spotId] = spotName, but not place[i] = spotName
+                //because the value returned by placepicker is index
+                for(var i = 0; i < that.data.spotList.length; ++i){
+                  tmpPlaceArray[that.data.spotList[i].spotId - 1] =  that.data.spotList[i].spotName;
+                }
+    
+                that.setData({
+                  placeArray : tmpPlaceArray,
+                })
+                console.log("placearray");
+                console.log(that.data.placeArray);
+            }
         }
     })
     //get timelist for placeIndex = 0
@@ -121,10 +144,13 @@ Page({
   //when date picker is selected
   //to be done
   bindDateChange: function(e) {
-    console.log('date picker发送选择改变，携带值为', e.detail.value)
+
     this.setData({
       date: e.detail.value
     })
+    console.log('date picker发送选择改变', this.data.date);
+    //check time
+    this.checkTime();
   },
 
   bindPlaceChange: function(e) {
@@ -135,6 +161,8 @@ Page({
     })
     //load the available time
     that.getSpotOrderTime();
+    //check time
+    that.checkTime();
   },
 
   //get listSpotOrderTime
@@ -297,8 +325,60 @@ Page({
 
       }
 
+  },
+
+  //SET DATE
+  setDate : function(){
+
+    var that = this;
+    var time = util.formatTime(new Date());
+    var arr = time.split(" ");
+    that.setData({
+      date : arr[0],
+      startDate : arr[0],
+    });
+  },
+
+  //CHECK TIME
+  checkTime : function(){
+      var that = this;
+
+      var tmplistData = that.data.listData;
+      var currentDateTime = util.formatTime(new Date());
+
+      tmplistData.forEach(v => {
+        let arr = v.order_time.split(" - ");
+        let hour = arr[1];//the endTime (hour + mininute)
+        let currentDate = currentDateTime.split(' ')[0];
+        let currentTime = currentDateTime.split(' ')[1];
+        if(that.data.date == currentDate){
+            let selectedTime = [hour, 0].map(util.formatNumber).join(':');
+            console.log("selectedTime");
+            console.log(selectedTime);
+            console.log("currentTime");
+            console.log(currentTime);
+    
+            if(currentTime >= selectedTime)
+              v.time_status = 1;//can not choose
+        }else if(that.data.date < currentDate){//this normally won't happen as start time of datePicker is aleady set
+            v.time_status = 1;
+        }else{
+          v.time_status = 0;//selectedDate > currentDate
+        }
+      });
+
+      that.setData({
+        listData : tmplistData,
+      });
+
+      console.log("listData");
+      console.log(that.data.listData);
+
+
   }
+  
 })
+
 
 // Component({
 

@@ -1,0 +1,25 @@
+<!--pages/search/search.wxml-->
+<!-- <text>pages/search/search.wxml</text> -->
+<!-- search bar -->
+<scroll-view scroll-y="true" class="container" bindscrolltoupper="upper" upper-threshold="10" lower-threshold="5" bindscrolltolower="lower"  scroll-into-view="{{toView}}" scroll-top="{{scrollTop}}">
+  <view class="search flex-wrp">
+      <view class="search-left flex-item">
+          <image src="../../images/search.png"></image>
+          <input placeholder="搜索地点" placeholder-class="search-placeholder" bindconfirm='goSearch'/>
+      </view>
+  </view>
+  
+<!-- search result -->
+<block wx:for="{{searchList}}" wx:for-index="idx" wx:for-item="item">
+<view class = "search-item" data-idx="{{idx}}" bindtap="onclickorder" >
+  <view class="item-img">
+    <image src="{{item.imgUrl}}"></image>
+  </view>
+  <text class = "spot">{{item.spotName}}</text>
+  <view class="like">
+    <a>{{item.realtimePeople}} / {{item.suggestedPeople}} 实时人数/建议人数 </a>
+  </view>
+</view>
+</block>
+
+</scroll-view>
