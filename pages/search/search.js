@@ -94,7 +94,7 @@ Page({
     // this.refresh();
     console.log("upper");
     // setTimeout(function(){wx.hideNavigationBarLoading();wx.stopPullDownRefresh();}, 2000);
-    setTimeout(function(){wx.hideNavigationBarLoading();wx.stopPullDownRefresh();}, 20);
+    //setTimeout(function(){wx.hideNavigationBarLoading();wx.stopPullDownRefresh();}, 20);
   },
 
   //when scroll to the button
@@ -102,7 +102,7 @@ Page({
     // wx.showNavigationBarLoading();
     var that = this;
     // setTimeout(function(){wx.hideNavigationBarLoading();that.nextLoad();}, 1000);
-    setTimeout(function(){wx.hideNavigationBarLoading();}, 10);
+   // setTimeout(function(){wx.hideNavigationBarLoading();}, 10);
     console.log("lower")
   },
 

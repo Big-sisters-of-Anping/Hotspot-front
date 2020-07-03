@@ -6,8 +6,9 @@
 
 <view class="outter">
 
-<van-divider class="divider"/>
-<view class="section">
+<!-- <van-divider class="divider"/> -->
+<!-- <view class="divLine1"></view> -->
+<view class="section-date">
   <!-- <view class="section__title">日期选择</view> -->
   <!-- <van-divider class="divider"/> -->
   <picker mode="date" value="{{date}}" start="{{startDate}}" end="2022-09-01" bindchange="bindDateChange">
@@ -31,64 +32,37 @@
   </picker>
 </view>
 
-  <!-- <van-panel title="预约时段" desc="" status="{{order_status}}" use-footer-slot>
-    <view>内容</view>
-    <view slot="footer">
-      <van-button size="small" type="info" bindtap="onclickorder"> 预约 </van-button>
-    </view>
-  </van-panel> -->
-  <!-- for循环默认的小标变量名未index,默认的当前变量名为item -->
-  <!-- <view wx:for="{{listData}}">
-  <view class = "item">
-    <text class = "order_time">时段: {{item.order_time}}</text>
-    <van-button round  wx:if="{{item.order_status == 1}}" class = "order_button" icon="like" type="info"  size="small" bindtap="onclickorder1" data-value="{{index}}">{{button_word}}</van-button>
-    <van-button round wx:elif="{{item.order_status == 0}}" class = "order_button" icon="like" color="#CCCCCC"  size="small" bindtap="onclickorder2" data-value="{{index}}">{{button_word}}</van-button>
-  </view>
-  <van-divider class="divider"/>
-</view> -->
-
-  <!-- <view class = "item">
-  <block wx:for="{{listData}}">
-    <text class = "order_time">时段: {{item.order_time}}</text>
-      <block wx:if="{{item.order_status == 1}}">
-          <van-button round class = "order_button" icon="like" type="info"  size="small" data-value="{{index}}" bindtap="onclickorder1">{{button_word[item.user_order_status]}}</van-button>
-      </block>
-      <block wx:elif="{{item.order_status == 0}}">
-          <van-button round class = "order_button" icon="like" color="#CCCCCC"  size="small" data-value="{{index}}" bindtap="onclickorder2">{{button_word[item.user_order_status]}}</van-button>
-      </block>
-       <view class="divLine"></view>
-   </block>   
-</view> -->
-
-
 <view class = "item">
   <block wx:for="{{listData}}">
     <!-- <text class = "order_time">时段: {{item.order_time}}</text> -->
     <!-- 时段也是静态的，除了时段的状态用动态的 -->
       <block wx:if="{{item.order_status == 1 && item.time_status == 0}}">
         <block wx:if="{{item.user_order_status == 0}}">
-            <van-button round plain class = "order_button" type="info"  size="normal" data-value="{{index}}" bindtap="onclickorder1">
+            <van-button plain class = "order_button" type="info"  size="normal" data-value="{{index}}" bindtap="onclickorder1">
               <text>{{item.order_time}}</text>
             </van-button>
         </block>
         <block wx:else>
-            <van-button round class = "order_button" type="info"  size="normal" data-value="{{index}}" bindtap="onclickorder1">
+            <van-button class = "order_button" type="info"  size="normal" data-value="{{index}}" bindtap="onclickorder1">
               <text>{{item.order_time}}</text>
             </van-button>
         </block>
       
       </block>
       <block wx:elif="{{item.order_status == 0 || item.time_status == 1}}">
-          <van-button round class = "order_button" color="#CCCCCC"  size="normal" data-value="{{index}}" bindtap="onclickorder2">
+          <van-button class = "order_button" color="#CCCCCC"  size="normal" data-value="{{index}}" bindtap="onclickorder2">
              <text>{{item.order_time}}</text>
             <!-- <text>{{button_word[item.user_order_status]}}</text> -->
           </van-button>
       </block>
       <!-- <van-divider class="divider"/> -->
-       <view class="divLine"></view>
+       <!-- <view class="divLine1"></view> -->
    </block>   
 </view>
-<van-toast id="van-toast" />
-<van-button class = "submit" type = "info" block bindtap="onclicksubmit">提交</van-button>
 
+<van-toast id="van-toast" />
+
+<view class = "submit-view">
+  <van-button round class = "submit" type = "info" block bindtap="onclicksubmit">{{submit_type}}</van-button>
+</view>
 </view>
