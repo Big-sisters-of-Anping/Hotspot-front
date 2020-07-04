@@ -30,6 +30,7 @@ Page({
     spotOrderTimeList: [],//correpsonding orderlist for the chosen spot
     spotWishTimeList: [],
     submit_type : "预约",//
+    btn_img : "clock",
   },
   /**
    * 生命周期函数--监听页面加载
@@ -169,6 +170,7 @@ Page({
       that.getSpotOrderTime();
       that.setData({
         submit_type : "预约",
+        btn_img : "clock",
       })
     }else{
       //wish
@@ -177,6 +179,7 @@ Page({
       that.getSpotWishTime();
       that.setData({
         submit_type : "想去",
+        btn_img : "like",
       })
     }
   },
@@ -440,7 +443,7 @@ Page({
            var toastText = "失败:(";
            //analysis errMsg
            if(res.data.errMsg.indexOf("Duplicate") != -1)
-             toastText = toastText + "\n 已选择该时段！";
+             toastText = toastText + "\n 您已“想去”该时段，请前往个人中心查看";
 
            Toast.fail(toastText);
          } else {

@@ -116,18 +116,6 @@ Page({
 
                 //set userId
                 that.getUserIdByName();
-
-                if(app.globalData.naviBean != 0){
-                  // wx.navigateBack({
-                  //   delta:1
-                  // })
-                  setTimeout(function(){
-                    wx.navigateTo({
-                      url: '/pages/order/order',
-                    })
-                  },500);
-                  app.globalData.naviBean = 1;
-                }
               }
             } 
           });
@@ -158,6 +146,7 @@ Page({
 
                 console.log("mine userId");
                 console.log(app.globalData.userId);
+                that.naviToOrder();
               }
           }
       });
@@ -168,6 +157,20 @@ Page({
 
   }
 },
+
+naviToOrder : function(e){
+  if(app.globalData.naviBean != 0){
+    // wx.navigateBack({
+    //   delta:1
+    // })
+    setTimeout(function(){
+      wx.navigateTo({
+        url: '/pages/order/order',
+      })
+    },500);
+    app.globalData.naviBean = 1;
+  }
+}
 
 })
 
