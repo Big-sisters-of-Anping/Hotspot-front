@@ -126,7 +126,8 @@ Page({
   //to be done
   bindDateChange: function(e) {
     this.setData({
-      date: e.detail.value
+      date: e.detail.value,
+      user_order_status_index: 9999
     })
     console.log('date picker发送选择改变', this.data.date);
     //load the available time
@@ -137,7 +138,8 @@ Page({
     var that = this;
     console.log('place picker发送选择改变，携带值为', e.detail)
     that.setData({
-      placeIndex: e.detail.value//start from 0
+      placeIndex: e.detail.value, //start from 0
+      user_order_status_index: 9999
     })
     //load the available time
     that.getSpotOrderTime();
@@ -154,16 +156,16 @@ Page({
       method: 'GET',
       success: (res) =>{
           //using spotOrderTimeList to update listData
-          var tmplistData = [];
-          for(var i = 0; i < res.data.length; i++) {
+          let tmplistData = [];
+          for(let i = 0; i < res.data.length; i++) {
             // check ordered people
-            var order_status = 0;
+            let order_status = 0;
             if(res.data[i].orderedPeople <= res.data[i].suggestedPeople)
               order_status = 1;
 
             // check time
-            var time_status = 0;
-            var currentDateTime = util.formatTime(new Date());
+            let time_status = 0;
+            let currentDateTime = util.formatTime(new Date());
             let hour = res.data[i].endTime;
             let currentDate = currentDateTime.split(' ')[0];
             let currentTime = currentDateTime.split(' ')[1];
@@ -178,11 +180,11 @@ Page({
               time_status = 0;//selectedDate > currentDate
             }
 
-            var curr = {
+            let curr = {
               order_time: res.data[i].startTime + " - " + res.data[i].endTime, 
               order_status: order_status, 
               time_status : time_status, 
-              user_order_status: "0"
+              user_order_status: 0
             };
             tmplistData.push(curr);
 
@@ -204,19 +206,19 @@ Page({
     //toggle the state of user_order_status, 0 ^ 1 -> 1, 1 ^ 1 -> 0
     console.log(this.data.listData);
 
+    let tmplistdata = this.data.listData;
     //cancel the last selected user_oder_status = 0 (at most one item can be selected)
     if(this.data.user_order_status_index != "9999"){ 
-      let tmplistdata = this.data.listData;
       tmplistdata[this.data.user_order_status_index].user_order_status = 0;
     }
 
     //change the user_order_status of the current item to 1
-    let tmplistdata = this.data.listData;
-
     //if last_index != current_index, -> 1, 
     //otherwise, -> 0 (already set in  if(this.data.user_order_status_index != "9999"))
-    if(this.data.user_order_status_index != value)
+    if(this.data.user_order_status_index != value){
       tmplistdata[value].user_order_status = tmplistdata[value].user_order_status ^ 1;
+      console.log("set value: " + this.data.user_order_status_index);
+    }
 
     if(tmplistdata[value].user_order_status == 0){
       this.data.user_order_status_index = "9999";
@@ -272,16 +274,11 @@ Page({
           url: app.globalData.url + "/order/addFIFOOrder",//addOrder to be done
           method: 'POST',
           data: {
-            "endTime": arr[1],
-            "note": "none",//?
             "orderDate": that.data.date,
-            // "orderId": 0,//this should be changed by server??
-            // "orderStatus": 0,//it's not necessary
-            "spotId": that.data.placeIndex + 1,//start from 1
-            "spotName": that.data.placeArray[that.data.placeIndex],
-            "startTime": arr[0],
             "userId": "2",//to be done
-            "spotOrderTimeId": that.data.spotOrderTimeList[that.data.user_order_status_index].spotOrderTimeId,
+            "orderTime":{
+              "spotOrderTimeId": that.data.spotOrderTimeList[that.data.user_order_status_index].spotOrderTimeId
+            }
           },
           headers:{
             'content-type': 'application/json' // 默认值 
