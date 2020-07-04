@@ -1,2 +1,4 @@
 <!--pages/login/index.wxml-->
-<button type="primary" plain open-type ="getUserInfo" bindgetuserinfo="handleGetUserInfo"> 登陆 </button>
+<button type="primary" plain open-type ="getUserInfo" bindgetuserinfo="handleGetUserInfo"> 登录 </button>
+
+<van-toast id="van-toast" />

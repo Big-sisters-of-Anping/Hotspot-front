@@ -1,9 +1,25 @@
 const newLocal = wx.getStorageInfoSync;
+
+var app = getApp();
 // pages/mine/mine.js
 Page({
   data: {
     userinfo:{},
-    currentTab: 1
+    currentTab: 1,
+    naviBean : 0,//to distinguish the jump from order page
+  },
+  onLoad : function(options){
+
+    var that = this;
+    if(options.orderBean != null){
+      var navibean = JSON.parse(options.naviBean);
+        console.log('navibean');
+        console.log(navibean);
+        that.setData({
+          naviBean : navibean,
+        })
+    }
+
   },
   onShow(){
     const userinfo=wx.getStorageSync("userinfo");
@@ -35,7 +51,80 @@ Page({
     const {userInfo}=e.detail;
     wx.setStorageSync('userinfo', userInfo);
     this.onShow()
-  }
+    //login to the HotSpot system
+    console.log('userinfo');
+    console.log(userInfo);
+    this.userLogin();
+  },
+
+  userLogin : function(e){
+    //check whether the user has already registered
+    var userId = 0; //not a valid userId
+    var that = this;
+    const userinfo = wx.getStorageSync("userinfo");
+    var re=/[^\u4e00-\u9fa5a-zA-Z0-9]/g;
+    var nickName = userinfo.nickName.replace(re, "");
+    console.log("nickName");
+    console.log(nickName);
+
+    wx.request({
+      url: app.globalData.url + "/user/findUserByName?userName="+ nickName,//to be modified
+      method: 'GET',
+      success: (res) =>{
+          if(res.data.length == 0){
+            console.log("to register it");
+            //this user has not registered, so register it
+            wx.request({
+              url: app.globalData.url + "/user/signup",
+              method: 'POST',
+              data: {
+                "userName": nickName,
+              },
+              //get userId 
+              success: (res) => {
+                if(res.data.sucess == false){
+                   //fail to register
+                   var toastText = "注册失败:(";
+                   Toast.fail(toastText);
+                }else{
+                   userId = res.data.userId;
+                   console.log("registerd it, userId");
+                   console.log(userId);
+                }
+              }
+            })
+          } else {
+              console.log("has already registered, get userId");
+              console.log("res.data");
+              console.log(res.data);
+              userId = res.data.userId;
+          }
+ 
+          //this user has aleady registered, login
+          wx.request({
+            url: app.globalData.url + "/user/signin?userId=" + userId,
+            method: 'GET',
+
+            success: (res) => {
+              if(res.data.success == false){
+                 //this user has not been registered, exception
+                 var toastText = "登录失败:(";
+                 Toast.fail(toastText);
+              }else {
+                //if this page is jumped from order page, jump back
+                console.log("login successfully");
+                if(that.data.naviBean != 0){
+                  wx.navigateBack({
+                    delta:1
+                  })
+                }
+              }
+            } 
+          });
+      }
+    });
+ }
+
 })
 
 //when Myorder button is clicked

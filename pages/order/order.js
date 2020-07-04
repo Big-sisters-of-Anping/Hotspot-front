@@ -257,6 +257,9 @@ Page({
   onclicksubmit: function(e){
       let that = this;
 
+      //check login state
+      that.checkLogin();
+
       //if time is selected (valid), send request
       if(that.data.user_order_status_index != "9999"){
 
@@ -330,9 +333,26 @@ Page({
       date : arr[0],
       startDate : arr[0],
     });
+  },
+
+  //check login state
+  checkLogin : function(e){
+    var userInfo = wx.getStorageSync('userinfo');
+    console.log("userinfo");
+    console.log(userInfo);
+
+    //the user has not logined 
+    if(userInfo == null){
+      wx.navigateTo({
+        url: '/pages/login/index',
+      })
+    }
   }
 
 })
+
+
+
 
 
 // Component({
