@@ -398,12 +398,18 @@ Page({
       // that.getUserIdByName();
       console.log("userId");
       console.log(app.globalData.userId);
-      console.log("SpotType "+ that.getSpotTypeById(Number(this.data.placeIndex) + 1));
-      if(that.getSpotTypeById(Number(this.data.placeIndex) + 1) == "0")
-        that.submitWish();
-      else
-        that.submitOrder();//submit after get userid
-    }
+      if(app.globalData.userId == '0'){
+        //UserId doesn't get successfully
+        that.getUserIdByName();
+
+      }else {
+        console.log("SpotType "+ that.getSpotTypeById(Number(this.data.placeIndex) + 1));
+        if(that.getSpotTypeById(Number(this.data.placeIndex) + 1) == "0")
+          that.submitWish();
+        else
+          that.submitOrder();//submit after get userid
+      }
+      }
   },
 
   submitWish : function(e){
@@ -525,6 +531,38 @@ Page({
     Toast.fail(toastText);
   };
   },
+
+  getUserIdByName : function(e){
+    //get user id
+    var that = this;
+    if(app.globalData.userId == '0'){
+      var userinfo = wx.getStorageSync("userinfo");
+      if(userinfo.length == 0) {
+        Toast.fail("获取用户信息失败！");
+      }else{
+          let re=/[^\u4e00-\u9fa5a-zA-Z0-9]/g;
+          let nickName = userinfo.nickName.replace(re, "");
+          wx.request({
+            url: app.globalData.url + "/user/findUserByName?userName="+ nickName,//to be modified
+            method: 'GET',
+            success: (res) =>{
+                if(res.data.length == 0){
+                  Toast.fail("获取用户信息失败！");
+                }else {
+                  console.log("getUserIdByName res.data");
+                  console.log(res.data);
+                  app.globalData.userId = res.data.userId;
+
+                  if(that.getSpotTypeById(Number(this.data.placeIndex) + 1) == "0")
+                      that.submitWish();
+                  else
+                      that.submitOrder();//submit after get userid
+                }
+            }
+        });
+      }
+  }
+}
 
 })
 

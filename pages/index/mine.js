@@ -168,7 +168,7 @@ naviToOrder : function(e){
         url: '/pages/order/order',
       })
     },500);
-    app.globalData.naviBean = 1;
+    app.globalData.naviBean = 0;
   }
 }
 
