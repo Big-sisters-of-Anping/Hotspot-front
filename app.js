@@ -35,7 +35,8 @@ App({
   // },
   globalData: {
     url: "http://47.104.248.28:8080",
-    spotList:[]
+    spotList:[],
+    naviBean: 0,
   },
 
     onLaunch: function () {

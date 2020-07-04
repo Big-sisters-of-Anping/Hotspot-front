@@ -30,6 +30,7 @@ Page({
     spotList:[],
     spotOrderTimeList: [],//correpsonding orderlist for the chosen spot
     submit_type : "预约",//
+    userId : '0',
   },
   /**
    * 生命周期函数--监听页面加载
@@ -261,9 +262,77 @@ Page({
 
       //check login state
       that.checkLogin();
+  },
 
-      //if time is selected (valid), send request
-      if(that.data.user_order_status_index != "9999"){
+  //SET DATE
+  setDate : function(){
+    var that = this;
+    var time = util.formatTime(new Date());
+    var arr = time.split(" ");
+    that.setData({
+      date : arr[0],
+      startDate : arr[0],
+    });
+  },
+
+  //check login state
+  checkLogin : function(e){
+
+    var that = this;
+    var userInfo = wx.getStorageSync('userinfo');
+    console.log("userinfo");
+    console.log(userInfo);
+
+    //the user has not logined 
+    if(userInfo.length == 0){
+      // let naviBean = JSON.stringify(1);
+      app.globalData.naviBean = 1;//indicate that this is the jump from order page
+      wx.switchTab({
+        // url: '/pages/index/mine?naviBean='+naviBean,
+        url: '/pages/index/mine',
+        complete: (res) =>{
+          console.log("complete");
+        }
+      })
+    }else {
+      that.getUserIdByName();
+      console.log("userId");
+      console.log(that.data.userId);
+      that.submitOrder();
+    }
+  },
+
+  getUserIdByName : function(e){
+      //get user id
+      var that = this;
+      if(that.data.userId == '0'){
+        var userinfo = wx.getStorageSync("userinfo");
+        if(userinfo.length == 0) {
+          Toast.fail("获取用户信息失败！");
+        }else{
+            let re=/[^\u4e00-\u9fa5a-zA-Z0-9]/g;
+            let nickName = userinfo.nickName.replace(re, "");
+            wx.request({
+              url: app.globalData.url + "/user/findUserByName?userName="+ nickName,//to be modified
+              method: 'GET',
+              success: (res) =>{
+                  if(res.data.length == 0){
+                    Toast.fail("获取用户信息失败！");
+                  }else {
+                    console.log("res.data");
+                    console.log(res.data);
+                    that.data.userId = res.data.userId;
+                  }
+              }
+          });
+        }
+      }
+  },
+
+  submitOrder : function(e){
+       //if time is selected (valid), send request
+       var that = this;
+       if(that.data.user_order_status_index != "9999"){
 
         //get start time and end time from 
         let dur = that.data.listData[that.data.user_order_status_index].order_time;
@@ -275,7 +344,7 @@ Page({
           method: 'POST',
           data: {
             "orderDate": that.data.date,
-            "userId": "2",//to be done
+            "userId": that.data.userId,//to be done
             "orderTime":{
               "spotOrderTimeId": that.data.spotOrderTimeList[that.data.user_order_status_index].spotOrderTimeId
             }
@@ -319,31 +388,6 @@ Page({
         Toast.fail(toastText);
 
       }
-  },
-
-  //SET DATE
-  setDate : function(){
-    var that = this;
-    var time = util.formatTime(new Date());
-    var arr = time.split(" ");
-    that.setData({
-      date : arr[0],
-      startDate : arr[0],
-    });
-  },
-
-  //check login state
-  checkLogin : function(e){
-    var userInfo = wx.getStorageSync('userinfo');
-    console.log("userinfo");
-    console.log(userInfo);
-
-    //the user has not logined 
-    if(userInfo == null){
-      wx.navigateTo({
-        url: '/pages/login/index',
-      })
-    }
   }
 
 })

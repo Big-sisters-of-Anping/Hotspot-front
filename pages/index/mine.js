@@ -113,10 +113,16 @@ Page({
               }else {
                 //if this page is jumped from order page, jump back
                 console.log("login successfully");
-                if(that.data.naviBean != 0){
-                  wx.navigateBack({
-                    delta:1
-                  })
+                if(app.globalData.naviBean != 0){
+                  // wx.navigateBack({
+                  //   delta:1
+                  // })
+                  setTimeout(function(){
+                    wx.navigateTo({
+                      url: '/pages/order/order',
+                    })
+                  },500);
+                  app.globalData.naviBean = 1;
                 }
               }
             } 

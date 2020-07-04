@@ -4,7 +4,6 @@
     "van-button": "@vant/weapp/button/index",
     "van-tabs": "@vant/weapp/tabs/index",
     "van-tab": "@vant/weapp/tab/index"
-  },
-  "navigationBarTitleText":"Hotspot"
+  }
   
 }
