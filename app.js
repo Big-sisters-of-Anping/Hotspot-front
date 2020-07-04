@@ -37,6 +37,7 @@ App({
     url: "http://47.104.248.28:8080",
     spotList:[],
     naviBean: 0,
+    userId : '0',
   },
 
     onLaunch: function () {

@@ -113,6 +113,10 @@ Page({
               }else {
                 //if this page is jumped from order page, jump back
                 console.log("login successfully");
+
+                //set userId
+                that.getUserIdByName();
+
                 if(app.globalData.naviBean != 0){
                   // wx.navigateBack({
                   //   delta:1
@@ -129,7 +133,41 @@ Page({
           });
       }
     });
- }
+ },
+
+ getUserIdByName : function(e){
+  //get user id
+  var that = this;
+  if(app.globalData.userId == '0'){
+    var userinfo = wx.getStorageSync("userinfo");
+    if(userinfo.length == 0) {
+      Toast.fail("获取用户信息失败！");
+    }else{
+        let re=/[^\u4e00-\u9fa5a-zA-Z0-9]/g;
+        let nickName = userinfo.nickName.replace(re, "");
+        wx.request({
+          url: app.globalData.url + "/user/findUserByName?userName="+ nickName,//to be modified
+          method: 'GET',
+          success: (res) =>{
+              if(res.data.length == 0){
+                Toast.fail("获取用户信息失败！");
+              }else {
+                console.log("getUserIdByName res.data");
+                console.log(res.data);
+                app.globalData.userId = res.data.userId;
+
+                console.log("mine userId");
+                console.log(app.globalData.userId);
+              }
+          }
+      });
+    }
+  }else {//user id has already been set
+    console.log("userId");
+    console.log(app.globalData.userId);
+
+  }
+},
 
 })
 
