@@ -4,6 +4,9 @@ const app = getApp()
 
 Page({
   data:{
+    btn_img: "clock",
+    btn_words: "预约",
+    selected_spot_id: -1,
     hasMarkers: false,
     //NJU, xianlin campus
     latitude: 32.11914686983188,
@@ -217,14 +220,19 @@ Page({
 
     onclickmarker: function(e){
       console.log(e);//makerId
+      this.setData({
+        btn_img: (e.markerId.spotType == 1) ? "clock":"like",
+        btn_words: (e.markerId.spotType == 1) ? "预约":"想去",
+        selected_spot_id: e.markerId.spotId
+      });
       // this.createCallout(e.detail.markerId);
     },
 
     onclickcallout: function(e){
       //pass information (place)
       console.log(e);
-      var spotId = Number(e.markerId.spotId) - 1;//spotId >=0, but placeIndex >= 0 
-      var orderBean = JSON.stringify(spotId);
+      let spotId = Number(e.markerId.spotId) - 1;//spotId >=0, but placeIndex >= 0 
+      let orderBean = JSON.stringify(spotId);
       wx.navigateTo({
         url: "/pages/order/order?orderBean=" + orderBean,
       })
@@ -250,12 +258,15 @@ Page({
     onclickorder: function(e){
       console.log(e);
       wx.navigateTo({
-        //note that absolute path should be used to avoid ERROR
-        url: "/pages/order/order",
-        events:{
-          //to be done, get info from pages/order
-        }
+        url: "/pages/order/order" + (this.data.selected_spot_id == -1 ? "" : ("?orderBean=" + (this.data.selected_spot_id-1)))
       })
+      // wx.navigateTo({
+      //   //note that absolute path should be used to avoid ERROR
+      //   url: "/pages/order/order",
+      //   events:{
+      //     //to be done, get info from pages/order
+      //   }
+      // })
 
     }
   

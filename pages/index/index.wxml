@@ -17,7 +17,7 @@
     >
     <cover-view class="order-cover-view">
     <!-- <van-icon name="like" class="like-icon"/> -->
-    <van-button round icon="clock" type="info" bindtap="onclickorder">预约</van-button>
+    <van-button round icon="{{btn_img}}" type="info" bindtap="onclickorder">{{btn_words}}</van-button>
     </cover-view>
     </map>
   </view>
