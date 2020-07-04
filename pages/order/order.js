@@ -28,6 +28,7 @@ Page({
     placeIndex: '0',//spotId
     placeArray:["南京大学游泳馆","方肇周体育馆","田径场","学生第四餐厅","学生第五餐厅","四组团餐厅" , "杜厦图书馆"],//get spotName
     spotOrderTimeList: [],//correpsonding orderlist for the chosen spot
+    spotWishTimeList: [],
     submit_type : "预约",//
   },
   /**
@@ -154,13 +155,29 @@ Page({
     var that = this;
 
     //get type of spot
-    let spotType = app.globalData.spotList[that.data.placeIndex].spotType;
-    if(spotType == 1){
+    console.log("spotlist");
+    console.log(app.globalData.spotList);
+
+    let spotList = app.globalData.spotList;
+    let spotIndex = that.getIndexById(Number(this.data.placeIndex) + 1);//id start from 1
+    let spotType = that.getSpotTypeById(Number(this.data.placeIndex) + 1);
+   
+    if(spotType == '1'){
       //order
+      console.log("order spot");
+      console.log(app.globalData.spotList[spotIndex].spotName);
       that.getSpotOrderTime();
+      that.setData({
+        submit_type : "预约",
+      })
     }else{
       //wish
+      console.log("wish spot");
+      console.log(app.globalData.spotList[spotIndex].spotName);
       that.getSpotWishTime();
+      that.setData({
+        submit_type : "想去",
+      })
     }
   },
 
@@ -181,25 +198,7 @@ Page({
             if(res.data[i].orderedPeople <= res.data[i].suggestedPeople)
               order_status = 1;
 
-            // check time
-            // let time_status = 0;
-            // let currentDateTime = util.formatTime(new Date());
-            // let hour = res.data[i].endTime;
-            // let currentDate = currentDateTime.split(' ')[0];
-            // let currentTime = currentDateTime.split(' ')[1];
-            // if(that.data.date == currentDate){
-            //     let selectedTime = [hour, 0].map(util.formatNumber).join(':');
-            //     if(currentTime >= selectedTime){
-            //       time_status = 1;//can not choose
-            //     }
-            // }else if(that.data.date < currentDate){//this normally won't happen as start time of datePicker is aleady set
-            //     time_status = 1;
-            // }else{
-            //   time_status = 0;//selectedDate > currentDate
-            // }
-
             let time_status = that.getTimeStatus(res.data[i]);
-
             let curr = {
               order_time: res.data[i].startTime + " - " + res.data[i].endTime, 
               order_status: order_status, 
@@ -218,7 +217,62 @@ Page({
   },
   
   getSpotWishTime : function(e){
+    var that = this;
+    var UrlplaceIndex = Number(that.data.placeIndex) + 1;
+    //load the available time
+    wx.request({
+      //placeIndex + 1 because the major key in database start from index = 1
+      url: app.globalData.url + "/wish/listSpotWishTime?spotId=" + UrlplaceIndex,
+      method: 'GET',
+      success: (res) =>{
+          //using spotOrderTimeList to update listData
+          let tmplistData = [];
+          for(let i = 0; i < res.data.length; i++) {
 
+            let time_status = that.getTimeStatus(res.data[i]);
+            let curr = {
+              order_time: res.data[i].startTime + " - " + res.data[i].endTime, 
+              order_status: 1, 
+              time_status : time_status, 
+              user_order_status: 0
+            };
+            tmplistData.push(curr);
+
+          }
+          that.setData({
+            listData : tmplistData,
+            spotWishTimeList : res.data //re-use the struct for OrderSpot
+          });
+          console.log("spotWishTimeList");
+          console.log(that.data.spotWishTimeList);
+      }
+    })
+  },
+
+  getIndexById : function(id){
+    console.log("id "+ id);
+    var index = -1;
+    var spotList = app.globalData.spotList;
+    for(let i = 0; i < spotList.length; ++i){
+      if(spotList[i].spotId == id){
+        index = i;
+      }
+    }
+    return index;
+  },
+
+  getSpotTypeById : function(id){
+    let spotType = 0;
+    let spotList = app.globalData.spotList;
+    let spotIndex = this.getIndexById(id);//id start from 1
+    if(spotIndex != -1){
+      console.log("spotIndex " + spotIndex);
+       spotType = spotList[spotIndex].spotType;
+    }else {
+      console.error("cannot find corresponding index");
+    }
+
+    return spotType;
   },
 
   getTimeStatus : function(selected){
@@ -341,81 +395,133 @@ Page({
       // that.getUserIdByName();
       console.log("userId");
       console.log(app.globalData.userId);
-      that.submitOrder();//submit after get userid
+      console.log("SpotType "+ that.getSpotTypeById(Number(this.data.placeIndex) + 1));
+      if(that.getSpotTypeById(Number(this.data.placeIndex) + 1) == "0")
+        that.submitWish();
+      else
+        that.submitOrder();//submit after get userid
     }
   },
 
-  submitOrder : function(e){
-       //if time is selected (valid), send request
-       var that = this;
-       if(that.data.user_order_status_index != "9999"){
+  submitWish : function(e){
+    var that = this;
+    if(that.data.user_order_status_index != "9999"){
 
-        //get start time and end time from 
-        let dur = that.data.listData[that.data.user_order_status_index].order_time;
-        let arr = dur.split(" - ");
-        console.log("arr "+ arr);
+     //get start time and end time from 
+     let dur = that.data.listData[that.data.user_order_status_index].order_time;
+     let arr = dur.split(" - ");
+     console.log("arr "+ arr);
 
-        wx.request({
-          url: app.globalData.url + "/order/addFIFOOrder",//addOrder to be done
-          method: 'POST',
-          data: {
-            "orderDate": that.data.date,
-            "userId": app.globalData.userId,//to be done
-            "orderTime":{
-              "spotOrderTimeId": that.data.spotOrderTimeList[that.data.user_order_status_index].spotOrderTimeId
-            }
-          },
-          headers:{
-            'content-type': 'application/json' // 默认值 
-          },
+     wx.request({
+       url: app.globalData.url + "/wish/addWish",//addOrder to be done
+       method: 'POST',
+       data: {
+         "wishDate": that.data.date,
+         "userId": app.globalData.userId,
+         "wishTime": {
+          "spotId": Number(that.data.placeIndex) + 1,
+          "spotWishTimeId": that.data.spotWishTimeList[that.data.user_order_status_index].spotWishTimeId,
+        },
+       },
+       headers:{
+         'content-type': 'application/json' // 默认值 
+       },
 
-          success(res){
-            console.log("res.data");
-            console.log(res.data);
-            console.log(res.data.success);
-            console.log("spotOrderTimeId "+ that.data.spotOrderTimeList[that.data.user_order_status_index].spotOrderTimeId);
-            if(res.data.success == false){
-              // var toastText = "预约失败:(" + res.data.errMsg;
-              var toastText = "预约失败:(";
-              //analysis errMsg
-              if(res.data.errMsg.indexOf("Duplicate") != -1)
-                toastText = toastText + "\n 已预约该时段！";
-              // wx.showToast({
-              //   title: toastText,
-              //   icon: '',
-              //   duration: 2000
-              // });
-              Toast.fail(toastText);
-            } else {
-              var toastText = "预约成功:)";
-              Toast.success(toastText);
-              setTimeout(function(){
-                wx.navigateBack({
-                  complete: (res) => {},
-                })
-              },2000);
-            }
-           }
-        })
-      } else {
-        // wx.showToast({
-        //   icon: 'none',
-        //   title: '请选择预约时段:(',
-        // })
-        var toastText = "请选择时段";
-        Toast.fail(toastText);
-      };
+       success(res){
+         console.log("res.data");
+         console.log(res.data);
+         console.log(res.data.success);
+         console.log("spotOrderTimeId "+ that.data.spotWishTimeList[that.data.user_order_status_index].spotWishTimeId);
+         console.log("spotId ");
+         console.log(Number(that.data.placeIndex) + 1);
+         console.log("userId " +app.globalData.userId);
+         if(res.data.success == false){
+           // var toastText = "预约失败:(" + res.data.errMsg;
+           var toastText = "失败:(";
+           //analysis errMsg
+           if(res.data.errMsg.indexOf("Duplicate") != -1)
+             toastText = toastText + "\n 已选择该时段！";
 
-     var tmpdata = {
-        "orderDate": that.data.date,
-        "userId": app.globalData.userId,//to be done
-        "orderTime":{
-          "spotOrderTimeId": that.data.spotOrderTimeList[that.data.user_order_status_index].spotOrderTimeId
+           Toast.fail(toastText);
+         } else {
+           var toastText = "成功:)";
+           Toast.success(toastText);
+           setTimeout(function(){
+             wx.navigateBack({
+               complete: (res) => {},
+             })
+           },2000);
+         }
         }
-      };
-      console.log("tmpdata");
-      console.log(tmpdata);
-  }
+     })
+   } else {
+     var toastText = "请选择时段";
+     Toast.fail(toastText);
+   };
+  },
+
+  submitOrder : function(e){
+    console.log("enter submitOrder");
+    //if time is selected (valid), send request
+    var that = this;
+    console.log("user_order_status_index " + that.data.user_order_status_index );
+    if(that.data.user_order_status_index != "9999"){
+      //get start time and end time from 
+      let dur = that.data.listData[that.data.user_order_status_index].order_time;
+      let arr = dur.split(" - ");
+      console.log("arr "+ arr);
+
+      wx.request({
+        url: app.globalData.url + "/order/addFIFOOrder",//addOrder to be done
+        method: 'POST',
+        data: {
+          "orderDate": that.data.date,
+          "userId": app.globalData.userId,//to be done
+          "orderTime":{
+            "spotOrderTimeId": that.data.spotOrderTimeList[that.data.user_order_status_index].spotOrderTimeId
+          }
+        },
+        headers:{
+          'content-type': 'application/json' // 默认值 
+        },
+
+      success(res){
+        console.log("res.data");
+        console.log(res.data);
+        console.log(res.data.success);
+        console.log("spotOrderTimeId "+ that.data.spotOrderTimeList[that.data.user_order_status_index].spotOrderTimeId);
+        if(res.data.success == false){
+          // var toastText = "预约失败:(" + res.data.errMsg;
+          var toastText = "预约失败:(";
+          //analysis errMsg
+          if(res.data.errMsg.indexOf("Duplicate") != -1)
+            toastText = toastText + "\n 已预约该时段！";
+          // wx.showToast({
+          //   title: toastText,
+          //   icon: '',
+          //   duration: 2000
+          // });
+          Toast.fail(toastText);
+        } else {
+          var toastText = "预约成功:)";
+          Toast.success(toastText);
+          setTimeout(function(){
+            wx.navigateBack({
+              complete: (res) => {},
+            })
+          },2000);
+        }
+        }
+    })
+  } else {
+    // wx.showToast({
+    //   icon: 'none',
+    //   title: '请选择预约时段:(',
+    // })
+    var toastText = "请选择时段";
+    Toast.fail(toastText);
+  };
+  },
 
 })
 
