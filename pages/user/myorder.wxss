@@ -5,29 +5,41 @@
   padding: 30rpx;
 }
 .first_tab .orders_item .orders_info_wrap {
-  flex: 2;
+  flex: 3;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-left: 40rpx;
+  margin-left: 30rpx;
 }
 .first_tab .orders_item .orders_info_wrap .order_name {
   display: -webkit-box;
   overflow: hidden;
   -webkit-box-origin: vertical;
-  font-size: 40rpx;
+  font-size: 35rpx;
 }
 .first_tab .orders_item .orders_time_wrap {
+  display: flex;
   flex: 3;
   flex-direction: column;
-  justify-content: center;
-  margin-left: 50rpx;
+  justify-content: space-around;
+  margin-left: 25rpx;
 }
-.first_tab .orders_item .orders_time_wrap .order_time {
+.first_tab .orders_item .orders_time_wrap .order_date {
   display: -webkit-box;
   overflow: hidden;
   -webkit-box-origin: vertical;
-  font-size: 40rpx;
+  font-size: 35rpx;
+}
+.first_tab .orders_item .orders_time_wrap .order_time {
+  display: -webkit-box;
+  color: red;
+  overflow: hidden;
+  -webkit-box-origin: vertical;
+  font-size: 35rpx;
+}
+.first_tab .orders_item .orders_time_wrap .order_People {
+  color: #4b87ee;
+  font-size: 30rpx;
 }
 .first_tab .orders_item .delete_wrap {
   flex: 1;

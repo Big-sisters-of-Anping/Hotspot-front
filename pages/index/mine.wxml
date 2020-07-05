@@ -36,7 +36,9 @@
         <van-button round icon="clock" type="info" class="mini-btn" bindtap="onclickMyOrder">
         我的预约
         </van-button>
-        <van-button round icon="like" type="info"  class="mini-btn" bindtap="onclickMyWish">我的想去</van-button>
+        <van-button round icon="like" type="info"  class="mini-btn" bindtap="onclickMyWish">
+        我的想去
+        </van-button>
       </view>
     </view>
     <!-- 应用信息相关 -->
