@@ -70,8 +70,8 @@ page {
   width: 100%;
 }
 .user_content .user_main .order_wrap .button_wrap .mini-btn {
-  margin-left: 42rpx;
-  margin-right: 40rpx;
+  margin-left: 50rpx;
+  margin-right: 30rpx;
   margin-bottom: 30rpx;
 }
 .user_content .user_main .app_info_wrap {

@@ -29,7 +29,7 @@
 
       <!-- 我的信息  -->
       <view class="user_info"> 
-        {user info}
+        我的HotSpot
       </view>
       <!-- 我的预约 -->
       <view class="button_wrap">

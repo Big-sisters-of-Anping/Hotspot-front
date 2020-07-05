@@ -63,6 +63,6 @@
 <van-toast id="van-toast" />
 
 <view class = "submit-view">
-  <van-button round class = "submit" type = "info" block bindtap="onclicksubmit">{{submit_type}}</van-button>
+<van-button round icon = "{{btn_img}}" class = "submit" type = "info" block bindtap="onclicksubmit">{{submit_type}}</van-button>
 </view>
 </view>

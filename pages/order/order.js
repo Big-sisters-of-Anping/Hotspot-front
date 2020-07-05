@@ -27,9 +27,10 @@ Page({
     button_word:["预约","取消"],
     placeIndex: '0',//spotId
     placeArray:["南京大学游泳馆","方肇周体育馆","田径场","学生第四餐厅","学生第五餐厅","四组团餐厅" , "杜厦图书馆"],//get spotName
-    spotList:[],
     spotOrderTimeList: [],//correpsonding orderlist for the chosen spot
+    spotWishTimeList: [],
     submit_type : "预约",//
+    btn_img : "clock",
   },
   /**
    * 生命周期函数--监听页面加载
@@ -51,18 +52,22 @@ Page({
     that.setDate();//it is only used when onLoad
     
     // set placeArray
-    if(that.data.spotList.length > 0){
-      var tmpPlaceArray = new Array(app.globalData.spotList.length);
+    var spotList = app.globalData.spotList;
+    if(spotList.length > 0){
+      console.log("test test");
+      //use global data spotList attained from the index.js
+      var tmpPlaceArray = new Array(spotList.length);
       //place[spotId] = spotName, but not place[i] = spotName
       //because the value returned by placepicker is index
-      for(var i = 0; i < that.data.spotList.length; ++i){
-        tmpPlaceArray[that.data.spotList[i].spotId - 1] =  that.data.spotList[i].spotName;
+      for(var i = 0; i < spotList.length; ++i){
+        tmpPlaceArray[spotList[i].spotId - 1] =  spotList[i].spotName;
       }
       that.setData({
         placeArray : tmpPlaceArray,
       })
     }
-    that.getSpotOrderTime();
+
+    that.getSpotTime();
 
   },
 
@@ -126,25 +131,60 @@ Page({
   //to be done
   bindDateChange: function(e) {
     this.setData({
-      date: e.detail.value
+      date: e.detail.value,
+      user_order_status_index: 9999
     })
     console.log('date picker发送选择改变', this.data.date);
     //load the available time
-    this.getSpotOrderTime();
+    this.getSpotTime();
   },
 
   bindPlaceChange: function(e) {
     var that = this;
     console.log('place picker发送选择改变，携带值为', e.detail)
     that.setData({
-      placeIndex: e.detail.value//start from 0
+      placeIndex: e.detail.value, //start from 0
+      user_order_status_index: 9999
     })
     //load the available time
-    that.getSpotOrderTime();
+    that.getSpotTime();
   },
 
   //get listSpotOrderTime
-  getSpotOrderTime: function (){
+  // the spot is whethr an order-spot, or a wish-spot
+  getSpotTime: function (){
+    var that = this;
+
+    //get type of spot
+    console.log("spotlist");
+    console.log(app.globalData.spotList);
+
+    let spotList = app.globalData.spotList;
+    let spotIndex = that.getIndexById(Number(this.data.placeIndex) + 1);//id start from 1
+    let spotType = that.getSpotTypeById(Number(this.data.placeIndex) + 1);
+   
+    if(spotType == '1'){
+      //order
+      console.log("order spot");
+      console.log(app.globalData.spotList[spotIndex].spotName);
+      that.getSpotOrderTime();
+      that.setData({
+        submit_type : "预约",
+        btn_img : "clock",
+      })
+    }else{
+      //wish
+      console.log("wish spot");
+      console.log(app.globalData.spotList[spotIndex].spotName);
+      that.getSpotWishTime();
+      that.setData({
+        submit_type : "想去",
+        btn_img : "like",
+      })
+    }
+  },
+
+  getSpotOrderTime : function(e){
     var that = this;
     var UrlplaceIndex = Number(that.data.placeIndex) + 1;
     //load the available time
@@ -154,35 +194,19 @@ Page({
       method: 'GET',
       success: (res) =>{
           //using spotOrderTimeList to update listData
-          var tmplistData = [];
-          for(var i = 0; i < res.data.length; i++) {
+          let tmplistData = [];
+          for(let i = 0; i < res.data.length; i++) {
             // check ordered people
-            var order_status = 0;
+            let order_status = 0;
             if(res.data[i].orderedPeople <= res.data[i].suggestedPeople)
               order_status = 1;
 
-            // check time
-            var time_status = 0;
-            var currentDateTime = util.formatTime(new Date());
-            let hour = res.data[i].endTime;
-            let currentDate = currentDateTime.split(' ')[0];
-            let currentTime = currentDateTime.split(' ')[1];
-            if(that.data.date == currentDate){
-                let selectedTime = [hour, 0].map(util.formatNumber).join(':');
-                if(currentTime >= selectedTime){
-                  time_status = 1;//can not choose
-                }
-            }else if(that.data.date < currentDate){//this normally won't happen as start time of datePicker is aleady set
-                time_status = 1;
-            }else{
-              time_status = 0;//selectedDate > currentDate
-            }
-
-            var curr = {
+            let time_status = that.getTimeStatus(res.data[i]);
+            let curr = {
               order_time: res.data[i].startTime + " - " + res.data[i].endTime, 
               order_status: order_status, 
               time_status : time_status, 
-              user_order_status: "0"
+              user_order_status: 0
             };
             tmplistData.push(curr);
 
@@ -194,6 +218,85 @@ Page({
       }
     })
   },
+  
+  getSpotWishTime : function(e){
+    var that = this;
+    var UrlplaceIndex = Number(that.data.placeIndex) + 1;
+    //load the available time
+    wx.request({
+      //placeIndex + 1 because the major key in database start from index = 1
+      url: app.globalData.url + "/wish/listSpotWishTime?spotId=" + UrlplaceIndex,
+      method: 'GET',
+      success: (res) =>{
+          //using spotOrderTimeList to update listData
+          let tmplistData = [];
+          for(let i = 0; i < res.data.length; i++) {
+
+            let time_status = that.getTimeStatus(res.data[i]);
+            let curr = {
+              order_time: res.data[i].startTime + " - " + res.data[i].endTime, 
+              order_status: 1, 
+              time_status : time_status, 
+              user_order_status: 0
+            };
+            tmplistData.push(curr);
+
+          }
+          that.setData({
+            listData : tmplistData,
+            spotWishTimeList : res.data //re-use the struct for OrderSpot
+          });
+          console.log("spotWishTimeList");
+          console.log(that.data.spotWishTimeList);
+      }
+    })
+  },
+
+  getIndexById : function(id){
+    console.log("id "+ id);
+    var index = -1;
+    var spotList = app.globalData.spotList;
+    for(let i = 0; i < spotList.length; ++i){
+      if(spotList[i].spotId == id){
+        index = i;
+      }
+    }
+    return index;
+  },
+
+  getSpotTypeById : function(id){
+    let spotType = 0;
+    let spotList = app.globalData.spotList;
+    let spotIndex = this.getIndexById(id);//id start from 1
+    if(spotIndex != -1){
+      console.log("spotIndex " + spotIndex);
+       spotType = spotList[spotIndex].spotType;
+    }else {
+      console.error("cannot find corresponding index");
+    }
+
+    return spotType;
+  },
+
+  getTimeStatus : function(selected){
+      var that = this;
+      let time_status = 0;
+      let currentDateTime = util.formatTime(new Date());
+      let hour = selected.endTime;
+      let currentDate = currentDateTime.split(' ')[0];
+      let currentTime = currentDateTime.split(' ')[1];
+      if(that.data.date == currentDate){
+          let selectedTime = [hour, 0].map(util.formatNumber).join(':');
+          if(currentTime >= selectedTime){
+            time_status = 1;//can not choose
+          }
+      }else if(that.data.date < currentDate){//this normally won't happen as start time of datePicker is aleady set
+          time_status = 1;
+      }else{
+        time_status = 0;//selectedDate > currentDate
+      }
+      return time_status;
+  },
 
   //to be done
   onclickorder1: function(e){
@@ -204,19 +307,19 @@ Page({
     //toggle the state of user_order_status, 0 ^ 1 -> 1, 1 ^ 1 -> 0
     console.log(this.data.listData);
 
+    let tmplistdata = this.data.listData;
     //cancel the last selected user_oder_status = 0 (at most one item can be selected)
     if(this.data.user_order_status_index != "9999"){ 
-      let tmplistdata = this.data.listData;
       tmplistdata[this.data.user_order_status_index].user_order_status = 0;
     }
 
     //change the user_order_status of the current item to 1
-    let tmplistdata = this.data.listData;
-
     //if last_index != current_index, -> 1, 
     //otherwise, -> 0 (already set in  if(this.data.user_order_status_index != "9999"))
-    if(this.data.user_order_status_index != value)
+    if(this.data.user_order_status_index != value){
       tmplistdata[value].user_order_status = tmplistdata[value].user_order_status ^ 1;
+      console.log("set value: " + this.data.user_order_status_index);
+    }
 
     if(tmplistdata[value].user_order_status == 0){
       this.data.user_order_status_index = "9999";
@@ -257,68 +360,8 @@ Page({
   onclicksubmit: function(e){
       let that = this;
 
-      //if time is selected (valid), send request
-      if(that.data.user_order_status_index != "9999"){
-
-        //get start time and end time from 
-        let dur = that.data.listData[that.data.user_order_status_index].order_time;
-        let arr = dur.split(" - ");
-        console.log("arr "+ arr);
-
-        wx.request({
-          url: app.globalData.url + "/order/addFIFOOrder",//addOrder to be done
-          method: 'POST',
-          data: {
-            "endTime": arr[1],
-            "note": "none",//?
-            "orderDate": that.data.date,
-            // "orderId": 0,//this should be changed by server??
-            // "orderStatus": 0,//it's not necessary
-            "spotId": that.data.placeIndex + 1,//start from 1
-            "spotName": that.data.placeArray[that.data.placeIndex],
-            "startTime": arr[0],
-            "userId": "2",//to be done
-            "spotOrderTimeId": that.data.spotOrderTimeList[that.data.user_order_status_index].spotOrderTimeId,
-          },
-          headers:{
-            'content-type': 'application/json' // 默认值 
-          },
-          success(res){
-            console.log(res.data);
-            console.log(res.data.success);
-            console.log("spotOrderTimeId "+ that.data.spotOrderTimeList[that.data.user_order_status_index].spotOrderTimeId);
-            if(res.data.success == false){
-              // var toastText = "预约失败:(" + res.data.errMsg;
-              var toastText = "预约失败:(";
-              //analysis errMsg
-              if(res.data.errMsg.indexOf("Duplicate") != -1)
-                toastText = toastText + "\n 已预约该时段！";
-              // wx.showToast({
-              //   title: toastText,
-              //   icon: '',
-              //   duration: 2000
-              // });
-              Toast.fail(toastText);
-            } else {
-              var toastText = "预约成功:)";
-              Toast.success(toastText);
-              setTimeout(function(){
-                wx.navigateBack({
-                  complete: (res) => {},
-                })
-              },2000);
-            }
-           }
-        })
-      } else {
-        // wx.showToast({
-        //   icon: 'none',
-        //   title: '请选择预约时段:(',
-        // })
-        var toastText = "请选择时段";
-        Toast.fail(toastText);
-
-      }
+      //check login state
+      that.checkLogin();
   },
 
   //SET DATE
@@ -330,9 +373,201 @@ Page({
       date : arr[0],
       startDate : arr[0],
     });
+  },
+
+  //check login state
+  checkLogin : function(e){
+
+    var that = this;
+    var userInfo = wx.getStorageSync('userinfo');
+    console.log("userinfo");
+    console.log(userInfo);
+
+    //the user has not logined 
+    if(userInfo.length == 0){
+      // let naviBean = JSON.stringify(1);
+      app.globalData.naviBean = 1;//indicate that this is the jump from order page
+      wx.switchTab({
+        // url: '/pages/index/mine?naviBean='+naviBean,
+        url: '/pages/index/mine',
+        complete: (res) =>{
+          console.log("complete");
+        }
+      })
+    }else {
+      // that.getUserIdByName();
+      console.log("userId");
+      console.log(app.globalData.userId);
+      if(app.globalData.userId == '0'){
+        //UserId doesn't get successfully
+        that.getUserIdByName();
+
+      }else {
+        console.log("SpotType "+ that.getSpotTypeById(Number(this.data.placeIndex) + 1));
+        if(that.getSpotTypeById(Number(this.data.placeIndex) + 1) == "0")
+          that.submitWish();
+        else
+          that.submitOrder();//submit after get userid
+      }
+      }
+  },
+
+  submitWish : function(e){
+    var that = this;
+    if(that.data.user_order_status_index != "9999"){
+
+     //get start time and end time from 
+     let dur = that.data.listData[that.data.user_order_status_index].order_time;
+     let arr = dur.split(" - ");
+     console.log("arr "+ arr);
+
+     wx.request({
+       url: app.globalData.url + "/wish/addWish",//addOrder to be done
+       method: 'POST',
+       data: {
+         "wishDate": that.data.date,
+         "userId": app.globalData.userId,
+         "wishTime": {
+          "spotId": Number(that.data.placeIndex) + 1,
+          "spotWishTimeId": that.data.spotWishTimeList[that.data.user_order_status_index].spotWishTimeId,
+        },
+       },
+       headers:{
+         'content-type': 'application/json' // 默认值 
+       },
+
+       success(res){
+         console.log("res.data");
+         console.log(res.data);
+         console.log(res.data.success);
+         console.log("spotOrderTimeId "+ that.data.spotWishTimeList[that.data.user_order_status_index].spotWishTimeId);
+         console.log("spotId ");
+         console.log(Number(that.data.placeIndex) + 1);
+         console.log("userId " +app.globalData.userId);
+         if(res.data.success == false){
+           // var toastText = "预约失败:(" + res.data.errMsg;
+           var toastText = "失败:(";
+           //analysis errMsg
+           if(res.data.errMsg.indexOf("Duplicate") != -1)
+             toastText = toastText + "\n 您已“想去”该时段，请前往个人中心查看";
+
+           Toast.fail(toastText);
+         } else {
+           var toastText = "成功:)";
+           Toast.success(toastText);
+           setTimeout(function(){
+             wx.navigateBack({
+               complete: (res) => {},
+             })
+           },2000);
+         }
+        }
+     })
+   } else {
+     var toastText = "请选择时段";
+     Toast.fail(toastText);
+   };
+  },
+
+  submitOrder : function(e){
+    console.log("enter submitOrder");
+    //if time is selected (valid), send request
+    var that = this;
+    console.log("user_order_status_index " + that.data.user_order_status_index );
+    if(that.data.user_order_status_index != "9999"){
+      //get start time and end time from 
+      let dur = that.data.listData[that.data.user_order_status_index].order_time;
+      let arr = dur.split(" - ");
+      console.log("arr "+ arr);
+
+      wx.request({
+        url: app.globalData.url + "/order/addFIFOOrder",//addOrder to be done
+        method: 'POST',
+        data: {
+          "orderDate": that.data.date,
+          "userId": app.globalData.userId,//to be done
+          "orderTime":{
+            "spotOrderTimeId": that.data.spotOrderTimeList[that.data.user_order_status_index].spotOrderTimeId
+          }
+        },
+        headers:{
+          'content-type': 'application/json' // 默认值 
+        },
+
+      success(res){
+        console.log("res.data");
+        console.log(res.data);
+        console.log(res.data.success);
+        console.log("spotOrderTimeId "+ that.data.spotOrderTimeList[that.data.user_order_status_index].spotOrderTimeId);
+        if(res.data.success == false){
+          // var toastText = "预约失败:(" + res.data.errMsg;
+          var toastText = "预约失败:(";
+          //analysis errMsg
+          if(res.data.errMsg.indexOf("Duplicate") != -1)
+            toastText = toastText + "\n 已预约该时段！";
+          // wx.showToast({
+          //   title: toastText,
+          //   icon: '',
+          //   duration: 2000
+          // });
+          Toast.fail(toastText);
+        } else {
+          var toastText = "预约成功:)";
+          Toast.success(toastText);
+          setTimeout(function(){
+            wx.navigateBack({
+              complete: (res) => {},
+            })
+          },2000);
+        }
+        }
+    })
+  } else {
+    // wx.showToast({
+    //   icon: 'none',
+    //   title: '请选择预约时段:(',
+    // })
+    var toastText = "请选择时段";
+    Toast.fail(toastText);
+  };
+  },
+
+  getUserIdByName : function(e){
+    //get user id
+    var that = this;
+    if(app.globalData.userId == '0'){
+      var userinfo = wx.getStorageSync("userinfo");
+      if(userinfo.length == 0) {
+        Toast.fail("获取用户信息失败！");
+      }else{
+          let re=/[^\u4e00-\u9fa5a-zA-Z0-9]/g;
+          let nickName = userinfo.nickName.replace(re, "");
+          wx.request({
+            url: app.globalData.url + "/user/findUserByName?userName="+ nickName,//to be modified
+            method: 'GET',
+            success: (res) =>{
+                if(res.data.length == 0){
+                  Toast.fail("获取用户信息失败！");
+                }else {
+                  console.log("getUserIdByName res.data");
+                  console.log(res.data);
+                  app.globalData.userId = res.data.userId;
+
+                  if(that.getSpotTypeById(Number(this.data.placeIndex) + 1) == "0")
+                      that.submitWish();
+                  else
+                      that.submitOrder();//submit after get userid
+                }
+            }
+        });
+      }
   }
+}
 
 })
+
+
+
 
 
 // Component({
