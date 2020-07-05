@@ -1,1 +1,34 @@
 /* pages/user/myorder.wxss */
+.first_tab .orders_item {
+  display: flex;
+  border-bottom: 3rpx solid #ccc;
+  padding: 30rpx;
+}
+.first_tab .orders_item .orders_info_wrap {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 40rpx;
+}
+.first_tab .orders_item .orders_info_wrap .order_name {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-origin: vertical;
+  font-size: 40rpx;
+}
+.first_tab .orders_item .orders_time_wrap {
+  flex: 3;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 50rpx;
+}
+.first_tab .orders_item .orders_time_wrap .order_time {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-origin: vertical;
+  font-size: 40rpx;
+}
+.first_tab .orders_item .delete_wrap {
+  flex: 1;
+}

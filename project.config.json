@@ -23,7 +23,7 @@
 			"disablePlugins": [],
 			"outputPath": ""
 		},
-		"useCompilerModule": false,
+		"useCompilerModule": true,
 		"userConfirmedUseCompilerModuleSwitch": false
 	},
 	"compileType": "miniprogram",
@@ -82,10 +82,17 @@
 					"scene": null
 				},
 				{
-					"id": -1,
-					"name": "Tabs",
-					"pathName": "pages/testvant/tabs",
+					"id": 3,
+					"name": "我的预约",
+					"pathName": "pages/user/myorder",
 					"query": "",
+					"scene": null
+				},
+				{
+					"id": 4,
+					"name": "我的预约",
+					"pathName": "pages/user/myorder",
+					"query": "userName=Starry",
 					"scene": null
 				}
 			]

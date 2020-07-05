@@ -1,2 +1,26 @@
-<!--pages/user/myorder.wxml-->
-<text>pages/user/myorder.wxml</text>
+<!--pages/user/myorder.wxml-->  
+<!-- 监听自定义事件 -->
+<Tabs tabs="{{tabs}}" bindTabsItemChange="handleTabsItemChange">
+  <block wx:if="{{tabs[0].isActive}}">
+    <view class="first_tab">
+        <navigator class="orders_item">
+        <!-- wx:for="{{ordersList}}"
+        wx:key="orderId"> -->
+ 
+          <view class="orders_info_wrap">
+            <!-- <view>{{item.spotName}}</view> -->
+            <view class="order_name">游泳馆</view>
+          </view>
+          <view class="orders_time_wrap">
+            <view class="order_time">10:00-11:00</view>
+          </view>
+          <view class="icon-small-wrp" bindtap="handleDeleteOrder">
+            <icon class="icon-small" type="cancel" size="23"></icon>
+          </view>
+
+        </navigator>
+      </view>
+  </block>
+  <block wx:elif="{{tabs[1].isActive}}">2</block>
+
+</Tabs>
