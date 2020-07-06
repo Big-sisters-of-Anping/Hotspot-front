@@ -364,6 +364,15 @@ Page({
       that.checkLogin();
   },
 
+  onclickinfo : function(e){
+    let that = this;
+
+    let placeBean = that.data.placeArray[that.data.placeIndex];
+    wx.navigateTo({
+      url: '/pages/history/history?placeBean='+placeBean,
+    })
+  },
+
   //SET DATE
   setDate : function(){
     var that = this;

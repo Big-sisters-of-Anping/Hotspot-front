@@ -15,10 +15,25 @@
   <view class="item-img">
     <image src="{{item.imgUrl}}"></image>
   </view>
-  <text class = "spot">{{item.spotName}}</text>
-  <view class="like">
-    <a>{{item.realtimePeople}} / {{item.suggestedPeople}} 实时人数/建议人数 </a>
+
+  <view class = "spot-info">
+    <view class = "spot-info-left">
+     <text class = "spot">{{item.spotName}}</text>
+      <view class="like">
+        <a>{{item.realtimePeople}} / {{item.suggestedPeople}} 实时人数/建议人数 </a>
+      </view>
+    </view>
+  
+    <view>
+    <view class = "spot-info-right">
+      <text class = "risk">风险程度</text>
+      <image class = "riskimg" src="{{item.riskUrl}}"></image>
+    </view>
+     
+    </view>
   </view>
+ 
+
 </view>
 </block>
 
