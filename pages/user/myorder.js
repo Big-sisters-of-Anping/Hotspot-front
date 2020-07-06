@@ -13,12 +13,13 @@ Page({
     userName: '',
     dialogShow: false,
     userId: 0,
-    currId: 0,
+    currId: 0,  //前台循环到的order(wish) index, 用于删改
     tabNum: 0,
-    active: 0,  
+    active: "order",  
     activeKey: 0,
     ordersList:[],
-    wishesList:[]
+    wishesList:[],
+    selected_spot_id: 0
   },
   //切换tab
   onChange(event) {
@@ -72,12 +73,9 @@ Page({
             });
             that.setData({
               wishesList : currWishes,
-              // hasMarkers: true
             })
         }
     })
-
-    
   },
   getOrders(curStatus){
     var that = this;
@@ -98,7 +96,7 @@ Page({
                   "orderDate": order.orderDate,
                   "orderId": order.orderId,
                   "orderStatus": order.orderStatus,
-                  "spotId": order.orderTime.sspotId,
+                  "spotId": order.orderTime.spotId,
                   "spotName":order.orderTime.spotName,
                   "suggestedPeople":order.orderTime.suggestedPeople,
                   "orderedPeople":order.orderTime.orderedPeople,
@@ -141,7 +139,7 @@ Page({
             // })
              wx.navigateTo({
               //note that absolute path should be used to avoid ERROR
-              url: "/pages/user/myorder?userId="+that.data.userId+"&tabNum=0&sideTabNum="+that.data.activeKey,
+              url: "/pages/user/myorder?userId="+that.data.userId+"&tabNum=order&sideTabNum="+that.data.activeKey,
               events:{
                 //to be done, get info from pages/order
               }
@@ -180,7 +178,7 @@ Page({
             // })
              wx.navigateTo({
               //note that absolute path should be used to avoid ERROR
-              url: "/pages/user/myorder?userId="+that.data.userId+"&tabNum=1",
+              url: "/pages/user/myorder?userId="+that.data.userId+"&tabNum=wish",
               events:{
                 //to be done, get info from pages/order
               }
@@ -195,16 +193,25 @@ Page({
     else this.handleDeleteWish();
   },
   onDialogShow(event) {
+    console.log(event);
     this.setData({
       dialogShow: true,
       currId: event.currentTarget.dataset.currid
     })
-    console.log(event.detail);
   },
 
   onClose() {
     this.setData({
       dialogShow: false
+    })
+  },
+  handleEdit: function(e){
+    console.log(e);
+    let spotId = Number(e.currentTarget.dataset.spotid) - 1;
+    let orderitem = e.currentTarget.dataset.orderitem;
+    let orderBean = JSON.stringify(spotId);
+    wx.navigateTo({
+      url: "/pages/order/change?orderBean=" + orderBean + "&orderitem=" + orderitem
     })
   },
 })

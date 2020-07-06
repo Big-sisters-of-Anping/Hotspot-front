@@ -3,15 +3,13 @@ import Toast from '@vant/weapp/toast/toast';
 
 var util = require('../../utils/util.js');
 var app = getApp();
-
-//需要从主页load获得global.data
-
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
+    curOrder: Object,
     date: '2020-08-01',
     startDate : '2020-08-01',//used to set the start time of picker
     //spotOrderTimeList
@@ -32,7 +30,7 @@ Page({
     placeArray:["南京大学游泳馆","方肇周体育馆","田径场","学生第四餐厅","学生第五餐厅","四组团餐厅" , "杜厦图书馆"],//get spotName
     spotOrderTimeList: [],//correpsonding orderlist for the chosen spot
     spotWishTimeList: [],
-    submit_type : "预约",//
+    submit_type : "更改",//
     btn_img : "clock",
   },
   /**
@@ -45,19 +43,17 @@ Page({
     //jump from callout
     if(options.orderBean != null){
       var orderBean = JSON.parse(options.orderBean);
-        console.log(orderBean);
-        that.setData({
-          placeIndex : orderBean,
-        })
+      console.log(orderBean);
+      that.setData({
+         placeIndex : orderBean,
+         curOrder: options.orderitem
+       })
     }
-    
     //set date to the current date & check current time
     that.setDate();//it is only used when onLoad
     
     // set placeArray
     var spotList = app.globalData.spotList;
-    console.log("spotList")
-    console.log(spotList)
     if(spotList.length > 0){
       console.log("test test");
       //use global data spotList attained from the index.js
@@ -173,19 +169,11 @@ Page({
       console.log("order spot");
       console.log(app.globalData.spotList[spotIndex].spotName);
       that.getSpotOrderTime();
-      that.setData({
-        submit_type : "预约",
-        btn_img : "clock",
-      })
     }else{
       //wish
       console.log("wish spot");
       console.log(app.globalData.spotList[spotIndex].spotName);
       that.getSpotWishTime();
-      that.setData({
-        submit_type : "想去",
-        btn_img : "like",
-      })
     }
   },
 

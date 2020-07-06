@@ -1,11 +1,12 @@
 <!--pages/user/myorder.wxml-->  
 <!-- 监听自定义事件 -->
-<view>
+
 <van-tabs active="{{active}}" bind:change="onChange">
-<van-tab title="我的预约">
+<!------------ 我的预约 ------------>
+<van-tab title="我的预约" name="order">
   <view class="all_orders">
 
-  <!-- 侧边导航栏 -->
+    <!-- 侧边导航栏 -->
     <view class="side_bar">
       <van-sidebar active-key="{{ activeKey }}" bind:change="onSideBarChange">
         <van-sidebar-item title="审核中" dot /> 
@@ -13,9 +14,9 @@
         <van-sidebar-item title="未通过" dot="99+" />
       </van-sidebar>
     </view>
-    <!-- <van-notify id="van-notify" /> -->
+    <van-notify id="van-notify" />
 
-    <!-- 已通过的预约 -->
+    <!-- 右边预约信息 -->
     <view wx:if="{{ordersList.length>0}}" class="first_tab">
         <view class="orders_item"
         wx:for="{{ordersList}}"
@@ -25,20 +26,17 @@
             <view class="order_name">{{item.spotName}}</view>
           </view>
          <!-- 右侧 预约时间&人数 -->
-          <view class="orders_time_wrap">
-
+          <view class="orders_time_wrap" bindtap="handleEdit" data-spotid="{{item.spotId}}" data-orderitem="{{item}}">
             <view class="order_date">{{item.orderDate}}</view>
             <view class="order_time">{{item.startTime}}-{{item.endTime}}</view>
             <view class="order_People">{{item.orderedPeople}}/{{item.suggestedPeople}}</view>
           </view>
 
           <van-toast id="van-toast" />
-
-          <view class="icon-small-wrp delete_wrap" bindtap="onDialogShow" data-currid="{{item.orderId}}">
-            <icon class="icon-small" type="cancel" size="20"></icon>
+            <view class="icon-small-wrp delete_wrap" bindtap="onDialogShow" data-currid="{{item.orderId}}">
+            <icon class="icon-small" type="cancel" size="22"></icon>
           </view>
 
-         
 
         </view>
     </view>
@@ -51,8 +49,8 @@
 
 </van-tab>
 
-
-  <van-tab title="我的想去">
+<!---------- 我的想去 ------------->
+  <van-tab title="我的想去" name="wish">
   <view class="all_orders">
    <view wx:if="{{wishesList.length>0}}" class="first_tab">
       <view class="orders_item"
@@ -82,7 +80,7 @@
     </view>
    </view>
   </van-tab>
-
+</van-tabs>
 
 
   <!-- 弹出框 -->
@@ -97,5 +95,3 @@
   >
   </van-dialog>
  
-</van-tabs>
-</view>

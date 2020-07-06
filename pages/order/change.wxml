@@ -1,0 +1,68 @@
+<!--pages/order/order.wxml-->
+<!-- <text>pages/order/order.wxml</text> -->
+
+<!-- <van-cell title="选择预约日期" value="{{ date }}" bind:click="onDisplay" />
+<van-calendar show="{{ show }}" bind:close="onClose" bind:confirm="onConfirm" /> -->
+
+<view class="outter">
+
+<!-- <van-divider class="divider"/> -->
+<!-- <view class="divLine1"></view> -->
+<view class="section-date">
+  <!-- <view class="section__title">日期选择</view> -->
+  <!-- <van-divider class="divider"/> -->
+  <picker mode="date" value="{{date}}" start="{{startDate}}" end="2022-09-01" bindchange="bindDateChange">
+    <view class="picker">
+      日期选择: {{date}}
+    </view>
+    <!-- <van-divider /> -->
+  </picker>
+</view>
+<!-- 地点picker to be done -->
+<view class="section">
+  <!-- <view class="section__title">地点选择</view> -->
+  <!-- <van-divider class="divider"/> -->
+  <!-- 暂时不能做到动态加载 picker-->
+  <picker mode="selector" value="{{index}}" range="{{placeArray}}" bindchange="bindPlaceChange">
+    <view class="picker">
+      地点选择: {{placeArray[placeIndex]}}
+    </view>
+    <!-- <van-divider /> -->
+    <view class="divLine1"></view>
+  </picker>
+</view>
+
+<view class = "item">
+  <block wx:for="{{listData}}">
+    <!-- <text class = "order_time">时段: {{item.order_time}}</text> -->
+    <!-- 时段也是静态的，除了时段的状态用动态的 -->
+      <block wx:if="{{item.order_status == 1 && item.time_status == 0}}">
+        <block wx:if="{{item.user_order_status == 0}}">
+            <van-button plain class = "order_button" type="info"  size="normal" data-value="{{index}}" bindtap="onclickorder1">
+              <text>{{item.order_time}}</text>
+            </van-button>
+        </block>
+        <block wx:else>
+            <van-button class = "order_button" type="info"  size="normal" data-value="{{index}}" bindtap="onclickorder1">
+              <text>{{item.order_time}}</text>
+            </van-button>
+        </block>
+      
+      </block>
+      <block wx:elif="{{item.order_status == 0 || item.time_status == 1}}">
+          <van-button class = "order_button" color="#CCCCCC"  size="normal" data-value="{{index}}" bindtap="onclickorder2">
+             <text>{{item.order_time}}</text>
+            <!-- <text>{{button_word[item.user_order_status]}}</text> -->
+          </van-button>
+      </block>
+      <!-- <van-divider class="divider"/> -->
+       <!-- <view class="divLine1"></view> -->
+   </block>   
+</view>
+
+<van-toast id="van-toast" />
+
+<view class = "submit-view">
+<van-button round class = "submit" type = "info" block bindtap="onclicksubmit">{{submit_type}}</van-button>
+</view>
+</view>

@@ -66,5 +66,6 @@ page {
   font-size: 25rpx;
 }
 .all_orders .first_tab .orders_item .delete_wrap {
+  margin-top: 20rpx;
   flex: 1;
 }
