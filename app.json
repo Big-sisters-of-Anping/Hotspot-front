@@ -6,7 +6,8 @@
     "pages/order/order",
     "pages/testvant/index",
     "pages/user/myorder",
-    "pages/search/search"
+    "pages/search/search",
+    "pages/user/test"
   ],
   "window": {
     "backgroundTextStyle": "light",

@@ -36,6 +36,7 @@
         <van-button round icon="clock" type="info" class="mini-btn" bindtap="onclickMyOrder">
         我的预约
         </van-button>
+         <mp-badge content="99+" style="position: absolute;top: -.4em;right: -.4em;"/>
         <van-button round icon="like" type="info"  class="mini-btn" bindtap="onclickMyWish">
         我的想去
         </van-button>
