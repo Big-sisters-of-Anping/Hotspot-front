@@ -5,14 +5,20 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    spotId: "1",
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    if(options.spotId != null){
+      let spotId = JSON.parse(options.spotId);
+        console.log(spotId);
+        this.setData({
+          spotId : spotId,
+        })
+    }
   },
 
   /**

@@ -367,9 +367,9 @@ Page({
   onclickinfo : function(e){
     let that = this;
 
-    let placeBean = that.data.placeArray[that.data.placeIndex];
+    let spotId = Number(that.data.placeIndex) + 1;//spotId
     wx.navigateTo({
-      url: '/pages/history/history?placeBean='+placeBean,
+      url: '/pages/history/history?spotId='+spotId,
     })
   },
 

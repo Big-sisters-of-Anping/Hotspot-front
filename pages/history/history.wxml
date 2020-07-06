@@ -1,2 +1,6 @@
 <!--pages/history/history.wxml-->
-<text>pages/history/history.wxml</text>
+<view class="page-body">
+  <view class="page-section page-section-gap">
+    <web-view src="http://47.104.248.28/hotspot/orderStatistic.html?spotId={{spotId}}"></web-view>
+  </view>
+</view>
