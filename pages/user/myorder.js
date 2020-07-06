@@ -37,22 +37,21 @@ Page({
       userName:options.userName,
       tabNum:options.tabNum
     })
-    if (this.data.tabNum == 0){
+    if (this.data.tabNum==0){
       this.setData({
         tabs:[
-          {id:0,value:"我的预约",isActive: true},
-          {id:1,value:"我的想去",isActive: false}
-        ]
-      })
+          {id:0,value:"我的预约",isActive:true},
+          {id:1,value:"我的想去",isActive:false}
+        ]})
     }
     else{
       this.setData({
         tabs:[
-          {id:0,value:"我的预约",isActive: false},
-          {id:1,value:"我的想去",isActive: true}
-        ]
-      })
+          {id:0,value:"我的预约",isActive:false},
+          {id:1,value:"我的想去",isActive:true}
+        ]})
     }
+    
     var that = this;
       wx.request({
           url: app.globalData.url + "/order/listUserOrders?userId=" + that.data.userId,
@@ -125,6 +124,78 @@ Page({
   },
   handleDeleteOrder(e){
     console.log(e);
+    var that = this;
+    let orderId = e.currentTarget.dataset.orderid;
+    console.log("orderId "+ orderId);
+    wx.request({
+      url: app.globalData.url + "/order/deleteOrder?orderId="+orderId,
+      method: 'DELETE',
+      headers:{
+        'content-type': 'application/json' // 默认值 
+      },
+      success(res){
+        console.log("res.data");
+        console.log(res.data);
+        console.log(res.data.errMsg)
+        if(res.data.success == false){
+          var toastText = "取消失败:(";
+          Toast.fail(toastText);
+        } else {
+          var toastText = "取消成功:)";
+          Toast.success(toastText);
+          setTimeout(function(){
+            // wx.navigateBack({
+            //   complete: (res) => {},
+            // })
+             wx.navigateTo({
+              //note that absolute path should be used to avoid ERROR
+              url: "/pages/user/myorder?userName="+that.data.userName+"&tabNum=0",
+              events:{
+                //to be done, get info from pages/order
+              }
+            })
+          },1000);
+        }
+       }
+    })
+   
+  },
 
+  handleDeleteWish(e){
+    console.log(e);
+    var that = this;
+    let wishId = e.currentTarget.dataset.wishid;
+    console.log("wishid "+ wishId);
+    wx.request({
+      url: app.globalData.url + "/wish/cancelWish?wishId="+wishId,
+      method: 'POST',
+      headers:{
+        'content-type': 'application/json' // 默认值 
+      },
+      success(res){
+        console.log("res.data");
+        console.log(res.data);
+        console.log(res.data.errMsg)
+        if(res.data.success == false){
+          var toastText = "取消失败:(";
+          Toast.fail(toastText);
+        } else {
+          var toastText = "取消成功:)";
+          Toast.success(toastText);
+          setTimeout(function(){
+            // wx.navigateBack({
+            //   complete: (res) => {},
+            // })
+             wx.navigateTo({
+              //note that absolute path should be used to avoid ERROR
+              url: "/pages/user/myorder?userName="+that.data.userName+"&tabNum=1",
+              events:{
+                //to be done, get info from pages/order
+              }
+            })
+          },1000);
+        }
+       }
+    })
   }
 })
