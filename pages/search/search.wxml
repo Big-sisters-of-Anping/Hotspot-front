@@ -1,13 +1,14 @@
 <!--pages/search/search.wxml-->
 <!-- <text>pages/search/search.wxml</text> -->
 <!-- search bar -->
-<scroll-view scroll-y="true" class="container" bindscrolltoupper="upper" upper-threshold="10" lower-threshold="5" bindscrolltolower="lower"  scroll-into-view="{{toView}}" scroll-top="{{scrollTop}}">
   <view class="search flex-wrp">
       <view class="search-left flex-item">
           <image src="../../images/search.png"></image>
           <input placeholder="搜索地点" placeholder-class="search-placeholder" bindconfirm='goSearch'/>
       </view>
   </view>
+  
+<scroll-view scroll-y="true" class="container" bindscrolltoupper="upper" upper-threshold="10" lower-threshold="5" bindscrolltolower="lower"  scroll-into-view="{{toView}}" scroll-top="{{scrollTop}}">
   
 <!-- search result -->
 <block wx:for="{{searchList}}" wx:for-index="idx" wx:for-item="item">
@@ -32,9 +33,10 @@
      
     </view>
   </view>
- 
-
 </view>
+</block>
+<block wx:if="{{searchList.length == 0}}">
+<text class = "tips">没有更多内容了~</text>
 </block>
 
 </scroll-view>

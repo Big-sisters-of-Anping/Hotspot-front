@@ -5,19 +5,19 @@
 .container{
   height: 1500rpx;
 }
-.container .search{
+ .search{
   width: 740rpx;
   height: 65rpx;
   padding: 12.5rpx 0 12.5rpx 15rpx;
   background: #2A8CE5;
 }
-.container .search-left{
+ .search-left{
   flex: 8;
   background: #4EA3E7;
   text-align: left;
   width: 98%;
 }
-.container .search-left input{
+ .search-left input{
   display: inline-block;
   height: 65rpx;
   font-size: 26rpx;
@@ -26,7 +26,7 @@
   color: #8CCEFD;
   line-height: 20rpx;
 }
-.container .search .search-left image{
+ .search .search-left image{
   display: inline-block;
   width: 35rpx;
   height: 35rpx;
@@ -101,3 +101,9 @@
 
 }
 
+.tips{
+  display: inline-block;
+  font-size: 30rpx;
+  padding-left: 250rpx;
+  padding-top:20rpx;
+}
