@@ -14,7 +14,6 @@
   custom-style="{{ customStyle }}"
   arrow-direction="{{ arrowDirection }}"
   custom-class="van-field"
-  title-class="label-class"
 >
   <slot name="left-icon" slot="icon" />
   <slot name="label" slot="title" />

@@ -70,7 +70,7 @@ Page({
                 "wishId": wish.wishId,
                 "spotId": wish.wishTime.spotId,
                 "spotName":wish.wishTime.spotName,
-                "userId": wish.userId
+                "userId": wish.userId,
               };
               currWishes.push(currWish);
             });

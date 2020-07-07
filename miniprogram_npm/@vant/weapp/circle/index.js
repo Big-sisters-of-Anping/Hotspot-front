@@ -41,12 +41,7 @@ component_1.VantComponent({
     color: {
       type: [String, Object],
       value: color_1.BLUE,
-      observer: function () {
-        var _this = this;
-        this.setHoverColor().then(function () {
-          _this.drawCircle(_this.currentValue);
-        });
-      },
+      observer: 'setHoverColor',
     },
     type: {
       type: String,
@@ -67,9 +62,7 @@ component_1.VantComponent({
   methods: {
     getContext: function () {
       var _this = this;
-      var _a = this.data,
-        type = _a.type,
-        size = _a.size;
+      var type = this.data.type;
       if (type === '') {
         var ctx = wx.createCanvasContext('van-circle', this);
         return Promise.resolve(ctx);
@@ -79,16 +72,13 @@ component_1.VantComponent({
         wx.createSelectorQuery()
           .in(_this)
           .select('#van-circle')
-          .node()
+          .fields({ node: true, size: true })
           .exec(function (res) {
             var canvas = res[0].node;
             var ctx = canvas.getContext(type);
-            if (!_this.inited) {
-              _this.inited = true;
-              canvas.width = size * dpr;
-              canvas.height = size * dpr;
-              ctx.scale(dpr, dpr);
-            }
+            canvas.width = res[0].width * dpr;
+            canvas.height = res[0].height * dpr;
+            ctx.scale(dpr, dpr);
             resolve(canvas_1.adaptor(ctx));
           });
       });
@@ -98,31 +88,32 @@ component_1.VantComponent({
       var _a = this.data,
         color = _a.color,
         size = _a.size;
-      if (utils_1.isObj(color)) {
-        return this.getContext().then(function (context) {
-          var LinearColor = context.createLinearGradient(size, 0, 0, 0);
+      var hoverColor = color;
+      this.getContext().then(function (context) {
+        if (utils_1.isObj(color)) {
+          var LinearColor_1 = context.createLinearGradient(size, 0, 0, 0);
           Object.keys(color)
             .sort(function (a, b) {
               return parseFloat(a) - parseFloat(b);
             })
             .map(function (key) {
-              return LinearColor.addColorStop(
+              return LinearColor_1.addColorStop(
                 parseFloat(key) / 100,
                 color[key]
               );
             });
-          _this.hoverColor = LinearColor;
-        });
-      }
-      this.hoverColor = color;
-      return Promise.resolve();
+          hoverColor = LinearColor_1;
+        }
+        _this.setData({ hoverColor: hoverColor });
+      });
     },
     presetCanvas: function (context, strokeStyle, beginAngle, endAngle, fill) {
       var _a = this.data,
         strokeWidth = _a.strokeWidth,
         lineCap = _a.lineCap,
         clockwise = _a.clockwise,
-        size = _a.size;
+        size = _a.size,
+        type = _a.type;
       var position = size / 2;
       var radius = position - strokeWidth / 2;
       context.setStrokeStyle(strokeStyle);
@@ -143,13 +134,15 @@ component_1.VantComponent({
       this.presetCanvas(context, layerColor, 0, PERIMETER, fill);
     },
     renderHoverCircle: function (context, formatValue) {
-      var clockwise = this.data.clockwise;
+      var _a = this.data,
+        clockwise = _a.clockwise,
+        hoverColor = _a.hoverColor;
       // 结束角度
       var progress = PERIMETER * (formatValue / 100);
       var endAngle = clockwise
         ? BEGIN_ANGLE + progress
         : 3 * Math.PI - (BEGIN_ANGLE + progress);
-      this.presetCanvas(context, this.hoverColor, BEGIN_ANGLE, endAngle);
+      this.presetCanvas(context, hoverColor, BEGIN_ANGLE, endAngle);
     },
     drawCircle: function (currentValue) {
       var _this = this;
@@ -196,12 +189,10 @@ component_1.VantComponent({
       }
     },
   },
-  mounted: function () {
-    var _this = this;
-    this.currentValue = this.data.value;
-    this.setHoverColor().then(function () {
-      _this.drawCircle(_this.currentValue);
-    });
+  created: function () {
+    var value = this.data.value;
+    this.currentValue = value;
+    this.drawCircle(value);
   },
   destroyed: function () {
     this.clearInterval();

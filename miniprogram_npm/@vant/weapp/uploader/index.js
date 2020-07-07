@@ -98,8 +98,6 @@ component_1.VantComponent({
             typeof item.isImage === 'undefined'
               ? utils_1.isImageFile(item)
               : item.isImage,
-          deletable:
-            typeof item.deletable === 'undefined' ? true : item.deletable,
         });
       });
       this.setData({ lists: lists, isInCount: lists.length < maxCount });

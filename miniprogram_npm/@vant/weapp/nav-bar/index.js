@@ -1,7 +1,6 @@
 'use strict';
 Object.defineProperty(exports, '__esModule', { value: true });
 var component_1 = require('../common/component');
-var utils_1 = require('../common/utils');
 component_1.VantComponent({
   classes: ['title-class'],
   props: {
@@ -37,7 +36,7 @@ component_1.VantComponent({
     baseStyle: '',
   },
   created: function () {
-    var statusBarHeight = utils_1.getSystemInfoSync().statusBarHeight;
+    var statusBarHeight = wx.getSystemInfoSync().statusBarHeight;
     var _a = this.data,
       safeAreaInsetTop = _a.safeAreaInsetTop,
       zIndex = _a.zIndex;

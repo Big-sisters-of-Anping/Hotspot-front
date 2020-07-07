@@ -17,9 +17,10 @@ var __assign =
 Object.defineProperty(exports, '__esModule', { value: true });
 var component_1 = require('../common/component');
 var props_1 = require('./props');
+var version_1 = require('../common/version');
 component_1.VantComponent({
   field: true,
-  classes: ['input-class', 'right-icon-class', 'label-class'],
+  classes: ['input-class', 'right-icon-class'],
   props: __assign(
     __assign(
       __assign(__assign({}, props_1.commonProps), props_1.inputProps),
@@ -125,7 +126,9 @@ component_1.VantComponent({
     },
     emitChange: function () {
       var _this = this;
-      this.setData({ value: this.value });
+      if (version_1.canIUseModel()) {
+        this.setData({ value: this.value });
+      }
       wx.nextTick(function () {
         _this.$emit('input', _this.value);
         _this.$emit('change', _this.value);

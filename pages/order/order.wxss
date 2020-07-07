@@ -1,6 +1,5 @@
 /* pages/order/order.wxss */
 /* @import "../../lib/weui.wxss"; */
-
 .outter{
   min-height: 100%;
 }

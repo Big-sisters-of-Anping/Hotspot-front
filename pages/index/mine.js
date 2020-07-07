@@ -1,3 +1,5 @@
+import Toast from '@vant/weapp/toast/toast';
+
 const newLocal = wx.getStorageInfoSync;
 var util = require('../../utils/util.js');
 var app = getApp();
@@ -129,6 +131,9 @@ Page({
 
                 //set userId
                 that.getUserIdByName();
+
+                //upload user location
+                that.uploadLocation();
               }
             } 
           });
@@ -183,7 +188,38 @@ naviToOrder : function(e){
     },500);
     app.globalData.naviBean = 0;
   }
-}
+},
+
+uploadLocation : function(){
+  var that = this;
+  setInterval(function () {
+    //循环执行代码
+    wx.getLocation({
+      success: (res) => {
+        let latitude = res.latitude;
+        let longitude = res.longitude;
+        let userId = app.globalData.userId;
+        //upload location
+        if(userId != '0'){
+          console.log(longitude);
+          console.log(latitude);
+          console.log(userId);
+          wx.request({
+            url: app.globalData.url + 
+                  "/spot/updateUserLocation?latitude="+latitude+ "&longitude=" + longitude + "&userId=" + userId,
+            method: "GET",
+    
+            success(res){
+              console.log(res);
+            }
+          })
+        }
+     }
+    })
+
+    },300000);//循环时间 unit:ms -> 5min 300000
+
+  },
 
 })
 

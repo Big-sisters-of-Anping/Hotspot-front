@@ -6,6 +6,7 @@ Page({
   data:{
     btn_img: "clock",
     btn_words: "预约",
+    btn_color: app.globalData.color_info,
     selected_spot_id: -1,
     hasMarkers: false,
     //NJU, xianlin campus
@@ -221,9 +222,11 @@ Page({
 
     onclickmarker: function(e){
       console.log(e);//makerId
+      console.log(app.globalData.color_info);
       this.setData({
         btn_img: (e.markerId.spotType == 1) ? "clock":"like",
         btn_words: (e.markerId.spotType == 1) ? "预约":"想去",
+        btn_color:(e.markerId.spotType == 1) ? app.globalData.color_info:app.globalData.color_wish,
         selected_spot_id: e.markerId.spotId
       });
       // this.createCallout(e.detail.markerId);
