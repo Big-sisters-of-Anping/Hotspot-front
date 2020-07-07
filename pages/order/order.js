@@ -12,6 +12,8 @@ Page({
    * 页面的初始数据
    */
   data: {
+    userId:'-1',
+    curOrder: Object,
     date: '2020-08-01',
     startDate : '2020-08-01',//used to set the start time of picker
     //spotOrderTimeList
@@ -51,6 +53,17 @@ Page({
           placeIndex : orderBean,
         })
     }
+    // console.log(options.orderItem)
+    if (options.orderItem != null){
+      var curOrder = JSON.parse(options.orderItem);
+      
+      that.setData({
+        curOrder: curOrder,
+        userId: options.userId,
+        submit_type: "修改"
+      })
+      console.log(that.data.submit_type)
+    }
     
     //set date to the current date & check current time
     that.setDate();//it is only used when onLoad
@@ -76,63 +89,14 @@ Page({
     that.getSpotTime();
 
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
+  onShow: function(){
+    console.log("onshow--------")
+    if (this.data.userId != '-1'){
+      this.setData({
+        submit_type: "修改"
+      })
+    }
   },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  },
-
-  onDisplay() {
-
-  },
-  onClose() {
-
-  },
-
   //when date picker is selected
   //to be done
   bindDateChange: function(e) {
@@ -378,9 +342,18 @@ Page({
   //to be done, submit order
   onclicksubmit: function(e){
       let that = this;
-
-      //check login state
-      that.checkLogin();
+      if (that.data.userId == -1)
+        //check login state
+        that.checkLogin();
+      else{
+        var userInfo = wx.getStorageSync('userinfo');
+          console.log("userinfo");
+          console.log(userInfo);
+          if(that.getSpotTypeById(Number(this.data.placeIndex) + 1) == "0")
+            that.submitWish();
+          else
+           that.submitOrder();//submit after get userid
+      }
   },
 
   onclickinfo : function(e){
@@ -481,13 +454,18 @@ Page({
 
            Toast.fail(toastText);
          } else {
-           var toastText = "成功:)";
-           Toast.success(toastText);
-           setTimeout(function(){
-             wx.navigateBack({
-               complete: (res) => {},
-             })
-           },2000);
+            if (that.data.userId==-1){
+              var toastText = "成功:)";
+              Toast.success(toastText);
+              setTimeout(function(){
+                wx.navigateBack({
+                  complete: (res) => {},
+                })
+              },2000);
+            }
+            else{
+              that.cancelCurWish();
+            }
          }
         }
      })
@@ -528,36 +506,90 @@ Page({
         console.log(res.data.success);
         console.log("spotOrderTimeId "+ that.data.spotOrderTimeList[that.data.user_order_status_index].spotOrderTimeId);
         if(res.data.success == false){
-          // var toastText = "预约失败:(" + res.data.errMsg;
           var toastText = "预约失败:(";
           //analysis errMsg
           if(res.data.errMsg.indexOf("Duplicate") != -1)
             toastText = toastText + "\n 已预约该时段！";
-          // wx.showToast({
-          //   title: toastText,
-          //   icon: '',
-          //   duration: 2000
-          // });
           Toast.fail(toastText);
         } else {
-          var toastText = "预约成功:)";
+          if(that.data.userId==-1){
+            var toastText = "预约成功:)";
+            Toast.success(toastText);
+            setTimeout(function(){
+              wx.navigateBack({
+                complete: (res) => {},
+              })
+            },2000);
+          }
+          else{
+            that.cancelCurOrder(); 
+          }
+        }
+        }
+    })
+  } else {
+    var toastText = "请选择时段";
+    Toast.fail(toastText);
+  };
+  },
+  cancelCurOrder : function (){
+    var that = this;
+    let orderId = that.data.curOrder.orderId;
+    console.log("orderId "+ orderId);
+    wx.request({
+      url: app.globalData.url + "/order/deleteOrder?orderId="+orderId,
+      method: 'DELETE',
+      headers:{
+        'content-type': 'application/json' // 默认值 
+      },
+      success(res){
+        console.log("res.data");
+        console.log(res.data);
+        console.log(res.data.errMsg)
+        if(res.data.success == false){
+          var toastText = "修改失败:(";
+          Toast.fail(toastText);
+        } else {
+          var toastText = "修改成功:)";
           Toast.success(toastText);
           setTimeout(function(){
             wx.navigateBack({
               complete: (res) => {},
             })
-          },2000);
+          },1000);
         }
-        }
+       }
     })
-  } else {
-    // wx.showToast({
-    //   icon: 'none',
-    //   title: '请选择预约时段:(',
-    // })
-    var toastText = "请选择时段";
-    Toast.fail(toastText);
-  };
+  },
+
+  cancelCurWish : function (){
+    var that = this;
+    let wishId = that.data.curOrder.wishId;
+    console.log("wishid "+ wishId);
+    wx.request({
+      url: app.globalData.url + "/wish/cancelWish?wishId="+wishId,
+      method: 'POST',
+      headers:{
+        'content-type': 'application/json' // 默认值 
+      },
+      success(res){
+        console.log(res);
+        console.log(res.data);
+        if(res.data == false){
+          var toastText = "2222修改失败:(";
+          Toast.fail(toastText);
+        } else {
+          console.log("suceedddddd!!!!!")
+          var toastText = "修改成功:)";
+          Toast.success(toastText);
+          setTimeout(function(){
+            wx.navigateBack({
+              complete: (res) => {},
+            })
+          },1000);
+        }
+       }
+    })
   },
 
   getUserIdByName : function(e){

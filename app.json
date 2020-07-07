@@ -7,7 +7,6 @@
     "pages/testvant/index",
     "pages/user/myorder",
     "pages/search/search",
-    "pages/order/change",
     "pages/history/history"
   ],
   "window": {

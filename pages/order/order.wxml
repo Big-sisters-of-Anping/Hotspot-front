@@ -23,13 +23,20 @@
   <!-- <view class="section__title">地点选择</view> -->
   <!-- <van-divider class="divider"/> -->
   <!-- 暂时不能做到动态加载 picker-->
-  <picker mode="selector" value="{{index}}" range="{{placeArray}}" bindchange="bindPlaceChange">
+  <picker wx:if="{{userId==-1}}" mode="selector" value="{{index}}" range="{{placeArray}}" bindchange="bindPlaceChange">
     <view class="picker">
       地点选择: {{placeArray[placeIndex]}}
     </view>
     <!-- <van-divider /> -->
     <view class="divLine1"></view>
   </picker>
+  <view wx:else>
+    <view class="picker">
+      目标地点: {{placeArray[placeIndex]}}
+    </view>
+    <!-- <van-divider /> -->
+    <view class="divLine1"></view>
+  </view>
 </view>
 
 <view class = "item">

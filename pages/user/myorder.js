@@ -219,7 +219,7 @@ Page({
     let orderItem = JSON.stringify(curitem);
 
     wx.navigateTo({
-      url: "/pages/order/change?orderBean=" + orderBean + "&orderItem=" + orderItem +"&userId=" + userId
+      url: "/pages/order/order?orderBean=" + orderBean + "&orderItem=" + orderItem +"&userId=" + userId
     })
   },
   handleWishEdit: function(e){
@@ -231,7 +231,7 @@ Page({
     let orderItem = JSON.stringify(curitem);
 
     wx.navigateTo({
-      url: "/pages/order/change?orderBean=" + orderBean + "&orderItem=" + orderItem +"&userId=" + userId
+      url: "/pages/order/order?orderBean=" + orderBean + "&orderItem=" + orderItem +"&userId=" + userId
     })
   }
 })

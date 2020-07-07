@@ -19,6 +19,7 @@ Page({
           naviBean : navibean,
         })
     }
+    // this.getUserIdByName()
   },
   onShow(){
 
@@ -26,60 +27,14 @@ Page({
     if(userinfo){
       this.setData({userinfo: userinfo});
     }
-    // var that = this;
-    // that.setData({userinfo: userinfo})
-
-    // console.log(userinfo.nickName);
-    // var re=/[^\u4e00-\u9fa5a-zA-Z0-9]/g;
-    // var nickName = userinfo.nickName.replace(re, "");
-
-    // //check whether user is in database
-    // wx.request({
-    //   url: app.globalData.url + "/user/findUserByName",
-    //   method: 'GET',
-    //   data: {
-    //     "userName": nickName
-    //   },
-    //   headers:{
-    //     'content-type': 'application/json' // 默认值 
-    //   },
-    //   success:function(res){
-    //     console.log(res.data);
-    //     that.setData({
-    //       userId: res.data.userId
-    //     })
-    //     console.log(that.data.userId);
-    //    }
-    // })
-
-    // console.log(that.data.userId);
-    //   // signup 
-    //   // 有“用户名不能为空！“的问题
-    // wx.request({
-    //   url: app.globalData.url + "/user/signup",//addOrder to be done
-    //   method: 'POST',
-    //   data: {
-    //       // "userName": "Marry"
-    //       //"userName": that.data.userinfo.nickName
-    //       "userName" : nickName
-    //    },
-    //    headers:{
-    //      'content-type': 'application/json' // 默认值 
-    //    },
-    //    success(res){
-    //      console.log(res.data);
-    //      if (res.data.success == true){
-    //       that.setData({
-    //         userId: res.data.userId
-    //       })}
-    //    }
-    //   })
+    this.getUserIdByName()
   },
 
   onclickMyOrder: function(e){
     let that=this
     console.log(e);
     console.log(that.data.userinfo);
+    console.log(app.globalData.userId)
     wx.navigateTo({
       //note that absolute path should be used to avoid ERROR
       url: "/pages/user/myorder?userId="+app.globalData.userId+"&tabNum=order&sideTabNum=1",
