@@ -4,33 +4,28 @@
 <!-- <van-cell title="选择预约日期" value="{{ date }}" bind:click="onDisplay" />
 <van-calendar show="{{ show }}" bind:close="onClose" bind:confirm="onConfirm" /> -->
 
+<view class="front-page">
+
+
+
 <view class="outter">
 
+<view class="section__title">
+    <view class="title-text">地点: {{placeArray[placeIndex]}}</view>
+</view>
 <!-- <van-divider class="divider"/> -->
 <!-- <view class="divLine1"></view> -->
 <view class="section-date">
   <!-- <view class="section__title">日期选择</view> -->
   <!-- <van-divider class="divider"/> -->
-  <picker mode="date" value="{{date}}" start="{{startDate}}" end="2022-09-01" bindchange="bindDateChange">
+  <picker mode="date" value="{{date}}" start="{{startDate}}" end="2022-09-01" bindchange="bindDateChange" class="mini-btn">
     <view class="picker">
       日期选择: {{date}}
     </view>
     <!-- <van-divider /> -->
   </picker>
 </view>
-<!-- 地点picker to be done -->
-<view class="section">
-  <!-- <view class="section__title">地点选择</view> -->
-  <!-- <van-divider class="divider"/> -->
-  <!-- 暂时不能做到动态加载 picker-->
-  <picker mode="selector" value="{{index}}" range="{{placeArray}}" bindchange="bindPlaceChange">
-    <view class="picker">
-      地点选择: {{placeArray[placeIndex]}}
-    </view>
-    <!-- <van-divider /> -->
-    <view class="divLine1"></view>
-  </picker>
-</view>
+
 
 <view class = "item">
   <block wx:for="{{listData}}">
@@ -64,5 +59,6 @@
 
 <view class = "submit-view">
 <van-button round class = "submit" type = "info" block bindtap="onclicksubmit">{{submit_type}}</van-button>
+</view>
 </view>
 </view>

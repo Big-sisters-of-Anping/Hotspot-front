@@ -7,12 +7,8 @@
     "pages/testvant/index",
     "pages/user/myorder",
     "pages/search/search",
-<<<<<<< HEAD
-    "pages/user/test",
-    "pages/order/change"
-=======
+    "pages/order/change",
     "pages/history/history"
->>>>>>> 7ebd234ee3bc9989a38017cacaf320c5b5d6b1a2
   ],
   "window": {
     "backgroundTextStyle": "light",

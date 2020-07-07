@@ -9,6 +9,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    userId:0,
     curOrder: Object,
     date: '2020-08-01',
     startDate : '2020-08-01',//used to set the start time of picker
@@ -40,15 +41,18 @@ Page({
     //test /spot/listAllSpots
     var that = this;
 
-    //jump from callout
     if(options.orderBean != null){
       var orderBean = JSON.parse(options.orderBean);
-      console.log(orderBean);
+      var curOrder = JSON.parse(options.orderItem);
+
       that.setData({
          placeIndex : orderBean,
-         curOrder: options.orderitem
+         curOrder: curOrder,
+         userId: options.userId
        })
     }
+    console.log(that.data.placeIndex)
+    console.log(that.data.curOrder)
     //set date to the current date & check current time
     that.setDate();//it is only used when onLoad
     
@@ -69,62 +73,6 @@ Page({
     }
 
     that.getSpotTime();
-
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  },
-
-  onDisplay() {
-
-  },
-  onClose() {
 
   },
 
@@ -351,10 +299,16 @@ Page({
 
   //to be done, submit order
   onclicksubmit: function(e){
-      let that = this;
-
-      //check login state
-      that.checkLogin();
+    // get user infomation
+    var that = this;
+    var userInfo = wx.getStorageSync('userinfo');
+  
+    console.log("userinfo");
+    console.log(userInfo);
+    if(that.getSpotTypeById(Number(this.data.placeIndex) + 1) == "0")
+      that.submitWish();
+    else
+     that.submitOrder();//submit after get userid
   },
 
   //SET DATE
@@ -368,48 +322,57 @@ Page({
     });
   },
 
-  //check login state
-  checkLogin : function(e){
-
+  submitOrder : function(e){
+    console.log("enter submitOrder");
+    //if time is selected (valid), send request
     var that = this;
-    var userInfo = wx.getStorageSync('userinfo');
-    console.log("userinfo");
-    console.log(userInfo);
+    console.log(that.data.curOrder)
+    console.log("user_order_status_index " + that.data.user_order_status_index );
+    if(that.data.user_order_status_index != "9999"){
+      //get start time and end time from 
+      let dur = that.data.listData[that.data.user_order_status_index].order_time;
+      let arr = dur.split(" - ");
+      console.log("arr "+ arr);
 
-    //the user has not logined 
-    if(userInfo.length == 0){
-      // let naviBean = JSON.stringify(1);
-      app.globalData.naviBean = 1;//indicate that this is the jump from order page
-      wx.switchTab({
-        // url: '/pages/index/mine?naviBean='+naviBean,
-        url: '/pages/index/mine',
-        complete: (res) =>{
-          console.log("complete");
+      wx.request({
+        url: app.globalData.url + "/order/addFIFOOrder",//addOrder to be done
+        method: 'POST',
+        data: {
+          "orderDate": that.data.date,
+          "userId": that.data.userId,//to be done
+          "orderTime":{
+            "spotOrderTimeId": that.data.spotOrderTimeList[that.data.user_order_status_index].spotOrderTimeId
+          }
+        },
+        headers:{
+          'content-type': 'application/json' // 默认值 
+        },
+
+      success(res){
+        console.log("res.data");
+        console.log(res.data);
+        console.log(res.data.success);
+        console.log("spotOrderTimeId "+ that.data.spotOrderTimeList[that.data.user_order_status_index].spotOrderTimeId);
+        if(res.data.success == false){
+          var toastText = "修改失败:(";
+          //analysis errMsg
+          if(res.data.errMsg.indexOf("Duplicate") != -1)
+            toastText = toastText + "\n 已预约该时段！";
+          Toast.fail(toastText);
+        } else {
+          that.cancelCurOrder();  //add cancel function
         }
-      })
-    }else {
-      // that.getUserIdByName();
-      console.log("userId");
-      console.log(app.globalData.userId);
-      if(app.globalData.userId == '0'){
-        //UserId doesn't get successfully
-        that.getUserIdByName();
-
-      }else {
-        console.log("SpotType "+ that.getSpotTypeById(Number(this.data.placeIndex) + 1));
-        if(that.getSpotTypeById(Number(this.data.placeIndex) + 1) == "0")
-          that.submitWish();
-        else
-          that.submitOrder();//submit after get userid
-      }
-      }
+        }
+    })
+  } else {
+    var toastText = "请选择时段";
+    Toast.fail(toastText);
+    };
   },
 
   submitWish : function(e){
     var that = this;
     if(that.data.user_order_status_index != "9999"){
-
-     //get start time and end time from 
      let dur = that.data.listData[that.data.user_order_status_index].order_time;
      let arr = dur.split(" - ");
      console.log("arr "+ arr);
@@ -419,7 +382,7 @@ Page({
        method: 'POST',
        data: {
          "wishDate": that.data.date,
-         "userId": app.globalData.userId,
+         "userId": that.data.userId,
          "wishTime": {
           "spotId": Number(that.data.placeIndex) + 1,
           "spotWishTimeId": that.data.spotWishTimeList[that.data.user_order_status_index].spotWishTimeId,
@@ -439,20 +402,14 @@ Page({
          console.log("userId " +app.globalData.userId);
          if(res.data.success == false){
            // var toastText = "预约失败:(" + res.data.errMsg;
-           var toastText = "失败:(";
+           var toastText = "1111修改失败:(";
            //analysis errMsg
            if(res.data.errMsg.indexOf("Duplicate") != -1)
              toastText = toastText + "\n 您已“想去”该时段，请前往个人中心查看";
 
            Toast.fail(toastText);
          } else {
-           var toastText = "成功:)";
-           Toast.success(toastText);
-           setTimeout(function(){
-             wx.navigateBack({
-               complete: (res) => {},
-             })
-           },2000);
+           that.cancelCurWish();
          }
         }
      })
@@ -462,73 +419,70 @@ Page({
    };
   },
 
-  submitOrder : function(e){
-    console.log("enter submitOrder");
-    //if time is selected (valid), send request
+  cancelCurOrder : function (){
     var that = this;
-    console.log("user_order_status_index " + that.data.user_order_status_index );
-    if(that.data.user_order_status_index != "9999"){
-      //get start time and end time from 
-      let dur = that.data.listData[that.data.user_order_status_index].order_time;
-      let arr = dur.split(" - ");
-      console.log("arr "+ arr);
-
-      wx.request({
-        url: app.globalData.url + "/order/addFIFOOrder",//addOrder to be done
-        method: 'POST',
-        data: {
-          "orderDate": that.data.date,
-          "userId": app.globalData.userId,//to be done
-          "orderTime":{
-            "spotOrderTimeId": that.data.spotOrderTimeList[that.data.user_order_status_index].spotOrderTimeId
-          }
-        },
-        headers:{
-          'content-type': 'application/json' // 默认值 
-        },
-
+    let orderId = that.data.curOrder.orderId;
+    console.log("orderId "+ orderId);
+    wx.request({
+      url: app.globalData.url + "/order/deleteOrder?orderId="+orderId,
+      method: 'DELETE',
+      headers:{
+        'content-type': 'application/json' // 默认值 
+      },
       success(res){
         console.log("res.data");
         console.log(res.data);
-        console.log(res.data.success);
-        console.log("spotOrderTimeId "+ that.data.spotOrderTimeList[that.data.user_order_status_index].spotOrderTimeId);
+        console.log(res.data.errMsg)
         if(res.data.success == false){
-          // var toastText = "预约失败:(" + res.data.errMsg;
-          var toastText = "预约失败:(";
-          //analysis errMsg
-          if(res.data.errMsg.indexOf("Duplicate") != -1)
-            toastText = toastText + "\n 已预约该时段！";
-          // wx.showToast({
-          //   title: toastText,
-          //   icon: '',
-          //   duration: 2000
-          // });
+          var toastText = "修改失败:(";
           Toast.fail(toastText);
         } else {
-          var toastText = "预约成功:)";
+          var toastText = "修改成功:)";
           Toast.success(toastText);
           setTimeout(function(){
             wx.navigateBack({
               complete: (res) => {},
             })
-          },2000);
+          },1000);
         }
-        }
+       }
     })
-  } else {
-    // wx.showToast({
-    //   icon: 'none',
-    //   title: '请选择预约时段:(',
-    // })
-    var toastText = "请选择时段";
-    Toast.fail(toastText);
-  };
+  },
+
+  cancelCurWish : function (){
+    var that = this;
+    let wishId = that.data.curOrder.wishId;
+    console.log("wishid "+ wishId);
+    wx.request({
+      url: app.globalData.url + "/wish/cancelWish?wishId="+wishId,
+      method: 'POST',
+      headers:{
+        'content-type': 'application/json' // 默认值 
+      },
+      success(res){
+        console.log(res);
+        console.log(res.data);
+        if(res.data == false){
+          var toastText = "2222修改失败:(";
+          Toast.fail(toastText);
+        } else {
+          console.log("suceedddddd!!!!!")
+          var toastText = "修改成功:)";
+          Toast.success(toastText);
+          setTimeout(function(){
+            wx.navigateBack({
+              complete: (res) => {},
+            })
+          },1000);
+        }
+       }
+    })
   },
 
   getUserIdByName : function(e){
     //get user id
     var that = this;
-    if(app.globalData.userId == '0'){
+    if(that.data.userId == '0'){
       var userinfo = wx.getStorageSync("userinfo");
       if(userinfo.length == 0) {
         Toast.fail("获取用户信息失败！");
@@ -544,7 +498,7 @@ Page({
                 }else {
                   console.log("getUserIdByName res.data");
                   console.log(res.data);
-                  app.globalData.userId = res.data.userId;
+                  that.data.userId = res.data.userId;
 
                   if(that.getSpotTypeById(Number(this.data.placeIndex) + 1) == "0")
                       that.submitWish();
