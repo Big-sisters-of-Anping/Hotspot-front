@@ -25,6 +25,9 @@ Page({
       //set img url
       that.setImg(searchBean);
 
+      //set risk-image url
+      that.setRiskImg(searchBean);
+
       that.setData({
         searchList : searchBean,
       })
@@ -140,6 +143,9 @@ Page({
           var searchBean = res.data;
           //set img url
           that.setImg(searchBean);
+          //set risk img url
+          that.setRiskImg(searchBean);
+
           that.setData({
             searchList : searchBean,
           })
@@ -165,6 +171,18 @@ Page({
       else if(v.spotId == 7)//图书馆
         v.imgUrl = "../../images/IMG_library.JPG";
     })
-  }
+  },
+
+  setRiskImg : function(searchBean){
+    searchBean.forEach(spot => {
+      var iconPath = "/images/location-green.png";
+      if(spot.realtimePeople == spot.suggestedPeople){
+        iconPath = "/images/location-red.png";
+      }else if (spot.realtimePeople > spot.suggestedPeople * 0.75){
+        iconPath = "/images/location-yellow.png";
+      }
+      spot.riskUrl = iconPath;
+  })
+},
 
 })

@@ -369,6 +369,15 @@ Page({
       that.checkLogin();
   },
 
+  onclickinfo : function(e){
+    let that = this;
+
+    let spotId = Number(that.data.placeIndex) + 1;//spotId
+    wx.navigateTo({
+      url: '/pages/history/history?spotId='+spotId,
+    })
+  },
+
   //SET DATE
   setDate : function(){
     var that = this;
