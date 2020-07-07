@@ -16,12 +16,12 @@ Page({
       // order_status: 0 stands for can not be ordered, 1 stands for can be ordered
       //user_order_status: 0 stands for haven't not been ordered, 1 stands for have been ordered
       //time_status: 0 stands for currentTime < selectedTime; 1 stands for currentTime >= selectedTime (consider date)
-      {order_time: "08:00 - 10:00", order_status: "1", time_status : "0", user_order_status: "0"},
-      {order_time: "10:00 - 12:00", order_status: "1", time_status : "0", user_order_status: "0"},
-      {order_time: "14:00 - 16:00", order_status: "1",time_status : "0", user_order_status: "0"},
-      {order_time: "16:00 - 18:00", order_status: "1",time_status : "0", user_order_status: "0"},
-      {order_time: "18:00 - 20:00", order_status: "1",time_status : "0", user_order_status: "0"},
-      {order_time: "20:00 - 22:00", order_status: "1",time_status : "0", user_order_status: "0"}
+      {order_time: "08:00 - 10:00", order_status: "1", time_status : "0", user_order_status: "0", orderRatio:""},
+      {order_time: "10:00 - 12:00", order_status: "1", time_status : "0", user_order_status: "0", orderRatio:""},
+      {order_time: "14:00 - 16:00", order_status: "1",time_status : "0", user_order_status: "0", orderRatio:""},
+      {order_time: "16:00 - 18:00", order_status: "1",time_status : "0", user_order_status: "0", orderRatio:""},
+      {order_time: "18:00 - 20:00", order_status: "1",time_status : "0", user_order_status: "0", orderRatio:""},
+      {order_time: "20:00 - 22:00", order_status: "1",time_status : "0", user_order_status: "0", orderRatio:""}
     ],
     user_order_status_index:"9999",//at most one listData[index].user_order_status = 1 is permitted
     button_word:["预约","取消"],
@@ -198,7 +198,7 @@ Page({
           for(let i = 0; i < res.data.length; i++) {
             // check ordered people
             let order_status = 0;
-            if(res.data[i].orderedPeople <= res.data[i].suggestedPeople)
+            if(res.data[i].orderedPeople < res.data[i].suggestedPeople)
               order_status = 1;
 
             let time_status = that.getTimeStatus(res.data[i]);
@@ -206,7 +206,8 @@ Page({
               order_time: res.data[i].startTime + " - " + res.data[i].endTime, 
               order_status: order_status, 
               time_status : time_status, 
-              user_order_status: 0
+              user_order_status: 0,
+              orderRatio: "剩余:" + (Number(res.data[i].suggestedPeople) - Number(res.data[i].orderedPeople)),
             };
             tmplistData.push(curr);
 
@@ -215,6 +216,8 @@ Page({
             listData : tmplistData,
             spotOrderTimeList : res.data
           });
+          console.log("listData");
+          console.log(that.data.listData);
       }
     })
   },
@@ -225,7 +228,7 @@ Page({
     //load the available time
     wx.request({
       //placeIndex + 1 because the major key in database start from index = 1
-      url: app.globalData.url + "/wish/listSpotWishTime?spotId=" + UrlplaceIndex,
+      url: app.globalData.url + "/wish/listSpotWishTime?date=" + that.data.date + "&spotId=" + UrlplaceIndex,
       method: 'GET',
       success: (res) =>{
           //using spotOrderTimeList to update listData
@@ -237,7 +240,8 @@ Page({
               order_time: res.data[i].startTime + " - " + res.data[i].endTime, 
               order_status: 1, 
               time_status : time_status, 
-              user_order_status: 0
+              user_order_status: 0,
+              orderRatio: "想去:" + Number(res.data[i].wishedPeople) +'/' + Number(res.data[i].suggestedPeople),
             };
             tmplistData.push(curr);
 
@@ -350,8 +354,14 @@ Page({
    
   },
   onclickorder2: function(e){
+    let value = e.currentTarget.dataset.value;
+    let toastText = '';
+    if(this.data.listData[value].order_status == '0')
+      toastText = '此时段预约已满:(';
+    else
+      toastText = '此时段不可预约:(';
     wx.showToast({
-      title: '此时段不可预约:(',
+      title: toastText,
       icon: 'none'
     })
   },

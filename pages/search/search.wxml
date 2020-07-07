@@ -4,10 +4,10 @@
   <view class="search flex-wrp">
       <view class="search-left flex-item">
           <image src="../../images/search.png"></image>
-          <input placeholder="搜索地点" placeholder-class="search-placeholder" bindconfirm='goSearch'/>
+          <input placeholder="搜索地点" placeholder-class="search-placeholder" value = "{{inputValue}}" bindconfirm='goSearch'/>
       </view>
   </view>
-  
+
 <scroll-view scroll-y="true" class="container" bindscrolltoupper="upper" upper-threshold="10" lower-threshold="5" bindscrolltolower="lower"  scroll-into-view="{{toView}}" scroll-top="{{scrollTop}}">
   
 <!-- search result -->
