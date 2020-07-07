@@ -42,8 +42,8 @@ App({
     color_wish: "#F9619E",
   },
 
-    onLaunch: function () {
-  
-    }
+  onLaunch: function () {
+      
+  },
   
 })
