@@ -1,6 +1,6 @@
 // pages/user/myorder.js
 import Toast from '@vant/weapp/toast/toast';
-
+// import Notify from '@vant/weapp/dist/notify/notify';
 var util = require('../../utils/util.js');
 var app = getApp();
 Page({
@@ -11,83 +11,52 @@ Page({
   
   data: {
     userName: '',
-    userId:117,
-    tabNum:0,
-    tabs:[
-      {
-        id:0,
-        value:"我的预约",
-        isActive:true
-      },
-      {
-        id:1,
-        value:"我的想去",
-        isActive:false
-      },
-    ],
+    dialogShow: false,
+    userId: 0,
+    currId: 0,  //前台循环到的order(wish) index, 用于删改
+    tabNum: 0,
+    active: "order",  
+    activeKey: 0,
     ordersList:[],
-    wishesList:[]
+    wishesList:[],
+    selected_spot_id: 0
+  },
+  //切换tab
+  onChange(event) {
+    var that = this;
+    that.data.active = event.detail.index;
+    console.log(that.data.active)
   },
 
+  //切换side_tab
+  onSideBarChange(event){
+    var that = this;
+    let curActiveKey = event.detail;
+    that.data.activeKey = curActiveKey;
+    console.log(curActiveKey)
+    // 更新右侧的预约内容页
+    that.getOrders(curActiveKey);
+    console.log(that.data.orderList)
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.setData({
-      userName:options.userName,
-      tabNum:options.tabNum
-    })
-    if (this.data.tabNum==0){
-      this.setData({
-        tabs:[
-          {id:0,value:"我的预约",isActive:true},
-          {id:1,value:"我的想去",isActive:false}
-        ]})
-    }
-    else{
-      this.setData({
-        tabs:[
-          {id:0,value:"我的预约",isActive:false},
-          {id:1,value:"我的想去",isActive:true}
-        ]})
-    }
-    
     var that = this;
-      wx.request({
-          url: app.globalData.url + "/order/listUserOrders?userId=" + that.data.userId,
-          method: 'GET',
-          success: (res) =>{
-              console.log(res.data);
-              var orderList = res.data;
-              var currOrders = [];
-              orderList.forEach(order => {
-                var currOrder = {
-                  "endTime": order.orderTime.endTime,
-                  "startTime": order.orderTime.startTime,
-                  "note": order.note,
-                  "orderDate": order.orderDate,
-                  "orderId": order.orderId,
-                  "orderStatus": order.orderStatus,
-                  "spotId": order.orderTime.sspotId,
-                  "spotName":order.orderTime.spotName,
-                  "suggestedPeople":order.orderTime.suggestedPeople,
-                  "orderedPeople":order.orderTime.orderedPeople,
-                  "userId": order.userId
-                };
-                currOrders.push(currOrder);
-              });
-              that.setData({
-                ordersList : currOrders,
-                // hasMarkers: true
-              })
-          }
-      })
-
+    that.setData({
+      userId:options.userId,
+      active:options.tabNum
+    })
+    if(that.data.active==0){
+      that.setData({activeKey:options.sideTabNum})
+    }
+    that.getOrders(that.data.activeKey);
+    console.log(that.data.active)
       wx.request({
         url: app.globalData.url + "/wish/listUserWishes?userId=" + that.data.userId,
         method: 'GET',
         success: (res) =>{
-            console.log(res.data);
+            // console.log(res.data);
             var wishesList = res.data;
             var currWishes = [];
             wishesList.forEach(wish => {
@@ -104,32 +73,53 @@ Page({
             });
             that.setData({
               wishesList : currWishes,
-              // hasMarkers: true
             })
         }
     })
-
   },
+  getOrders(curStatus){
+    var that = this;
+    wx.request({
+        url: app.globalData.url + "/order/listUserOrders?userId=" + that.data.userId,
+        method: 'GET',
+        success: (res) =>{
+            console.log(res.data);
+            var orderList = res.data;
+            var currOrders = [];
+            orderList.forEach(order => {
 
-  handleTabsItemChange(e){
-    //获取被点击的标题索引
-    const {index}=e.detail;
-    //修改源数据
-    let {tabs} = this.data;
-    tabs.forEach((v,i)=>i===index?v.isActive=true:v.isActive=false);
-    //赋值
-    this.setData({
-      tabs
+              if (order.orderStatus==curStatus){
+                var currOrder = {
+                  "endTime": order.orderTime.endTime,
+                  "startTime": order.orderTime.startTime,
+                  "note": order.note,
+                  "orderDate": order.orderDate,
+                  "orderId": order.orderId,
+                  "orderStatus": order.orderStatus,
+                  "spotId": order.orderTime.spotId,
+                  "spotName":order.orderTime.spotName,
+                  "suggestedPeople":order.orderTime.suggestedPeople,
+                  "orderedPeople":order.orderTime.orderedPeople,
+                  "userId": order.userId
+                };
+               currOrders.push(currOrder);
+              }
+            });
+            that.setData({
+              ordersList: currOrders
+            })
+            console.log(that.data.ordersList)
+        }
     })
   },
-  handleDeleteOrder(e){
-    console.log(e);
+
+  handleDeleteOrder(){
     var that = this;
-    let orderId = e.currentTarget.dataset.orderid;
+    let orderId = that.data.currId;
     console.log("orderId "+ orderId);
     wx.request({
-      url: app.globalData.url + "/order/deleteOrder?orderId="+orderId,
-      method: 'DELETE',
+      url: app.globalData.url + "/order/cancelOrder?orderId="+orderId,
+      method: 'GET',
       headers:{
         'content-type': 'application/json' // 默认值 
       },
@@ -149,7 +139,7 @@ Page({
             // })
              wx.navigateTo({
               //note that absolute path should be used to avoid ERROR
-              url: "/pages/user/myorder?userName="+that.data.userName+"&tabNum=0",
+              url: "/pages/user/myorder?userId="+that.data.userId+"&tabNum=order&sideTabNum="+that.data.activeKey,
               events:{
                 //to be done, get info from pages/order
               }
@@ -161,10 +151,9 @@ Page({
    
   },
 
-  handleDeleteWish(e){
-    console.log(e);
+  handleDeleteWish(){ 
     var that = this;
-    let wishId = e.currentTarget.dataset.wishid;
+    let wishId = that.data.currId;
     console.log("wishid "+ wishId);
     wx.request({
       url: app.globalData.url + "/wish/cancelWish?wishId="+wishId,
@@ -173,13 +162,14 @@ Page({
         'content-type': 'application/json' // 默认值 
       },
       success(res){
-        console.log("res.data");
+        console.log(res);
         console.log(res.data);
-        console.log(res.data.errMsg)
-        if(res.data.success == false){
+        // console.log(res.data.errMsg)
+        if(res.data == false){
           var toastText = "取消失败:(";
           Toast.fail(toastText);
         } else {
+          console.log("suceedddddd!!!!!")
           var toastText = "取消成功:)";
           Toast.success(toastText);
           setTimeout(function(){
@@ -188,7 +178,7 @@ Page({
             // })
              wx.navigateTo({
               //note that absolute path should be used to avoid ERROR
-              url: "/pages/user/myorder?userName="+that.data.userName+"&tabNum=1",
+              url: "/pages/user/myorder?userId="+that.data.userId+"&tabNum=wish",
               events:{
                 //to be done, get info from pages/order
               }
@@ -197,5 +187,31 @@ Page({
         }
        }
     })
-  }
+  },
+  handleCancel(event){
+    if (this.data.active==0)this.handleDeleteOrder();
+    else this.handleDeleteWish();
+  },
+  onDialogShow(event) {
+    console.log(event);
+    this.setData({
+      dialogShow: true,
+      currId: event.currentTarget.dataset.currid
+    })
+  },
+
+  onClose() {
+    this.setData({
+      dialogShow: false
+    })
+  },
+  handleEdit: function(e){
+    console.log(e);
+    let spotId = Number(e.currentTarget.dataset.spotid) - 1;
+    let orderitem = e.currentTarget.dataset.orderitem;
+    let orderBean = JSON.stringify(spotId);
+    wx.navigateTo({
+      url: "/pages/order/change?orderBean=" + orderBean + "&orderitem=" + orderitem
+    })
+  },
 })

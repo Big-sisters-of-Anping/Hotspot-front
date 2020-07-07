@@ -3,15 +3,13 @@ import Toast from '@vant/weapp/toast/toast';
 
 var util = require('../../utils/util.js');
 var app = getApp();
-
-//需要从主页load获得global.data
-
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
+    curOrder: Object,
     date: '2020-08-01',
     startDate : '2020-08-01',//used to set the start time of picker
     //spotOrderTimeList
@@ -19,12 +17,12 @@ Page({
       // order_status: 0 stands for can not be ordered, 1 stands for can be ordered
       //user_order_status: 0 stands for haven't not been ordered, 1 stands for have been ordered
       //time_status: 0 stands for currentTime < selectedTime; 1 stands for currentTime >= selectedTime (consider date)
-      {order_time: "08:00 - 10:00", order_status: "1", time_status : "0", user_order_status: "0", orderRatio:""},
-      {order_time: "10:00 - 12:00", order_status: "1", time_status : "0", user_order_status: "0", orderRatio:""},
-      {order_time: "14:00 - 16:00", order_status: "1",time_status : "0", user_order_status: "0", orderRatio:""},
-      {order_time: "16:00 - 18:00", order_status: "1",time_status : "0", user_order_status: "0", orderRatio:""},
-      {order_time: "18:00 - 20:00", order_status: "1",time_status : "0", user_order_status: "0", orderRatio:""},
-      {order_time: "20:00 - 22:00", order_status: "1",time_status : "0", user_order_status: "0", orderRatio:""}
+      {order_time: "08:00 - 10:00", order_status: "1", time_status : "0", user_order_status: "0"},
+      {order_time: "10:00 - 12:00", order_status: "1", time_status : "0", user_order_status: "0"},
+      {order_time: "14:00 - 16:00", order_status: "1",time_status : "0", user_order_status: "0"},
+      {order_time: "16:00 - 18:00", order_status: "1",time_status : "0", user_order_status: "0"},
+      {order_time: "18:00 - 20:00", order_status: "1",time_status : "0", user_order_status: "0"},
+      {order_time: "20:00 - 22:00", order_status: "1",time_status : "0", user_order_status: "0"}
     ],
     user_order_status_index:"9999",//at most one listData[index].user_order_status = 1 is permitted
     button_word:["预约","取消"],
@@ -32,7 +30,7 @@ Page({
     placeArray:["南京大学游泳馆","方肇周体育馆","田径场","学生第四餐厅","学生第五餐厅","四组团餐厅" , "杜厦图书馆"],//get spotName
     spotOrderTimeList: [],//correpsonding orderlist for the chosen spot
     spotWishTimeList: [],
-    submit_type : "预约",//
+    submit_type : "更改",//
     btn_img : "clock",
   },
   /**
@@ -45,19 +43,17 @@ Page({
     //jump from callout
     if(options.orderBean != null){
       var orderBean = JSON.parse(options.orderBean);
-        console.log(orderBean);
-        that.setData({
-          placeIndex : orderBean,
-        })
+      console.log(orderBean);
+      that.setData({
+         placeIndex : orderBean,
+         curOrder: options.orderitem
+       })
     }
-    
     //set date to the current date & check current time
     that.setDate();//it is only used when onLoad
     
     // set placeArray
     var spotList = app.globalData.spotList;
-    console.log("spotList")
-    console.log(spotList)
     if(spotList.length > 0){
       console.log("test test");
       //use global data spotList attained from the index.js
@@ -173,19 +169,11 @@ Page({
       console.log("order spot");
       console.log(app.globalData.spotList[spotIndex].spotName);
       that.getSpotOrderTime();
-      that.setData({
-        submit_type : "预约",
-        btn_img : "clock",
-      })
     }else{
       //wish
       console.log("wish spot");
       console.log(app.globalData.spotList[spotIndex].spotName);
       that.getSpotWishTime();
-      that.setData({
-        submit_type : "想去",
-        btn_img : "like",
-      })
     }
   },
 
@@ -203,7 +191,7 @@ Page({
           for(let i = 0; i < res.data.length; i++) {
             // check ordered people
             let order_status = 0;
-            if(res.data[i].orderedPeople < res.data[i].suggestedPeople)
+            if(res.data[i].orderedPeople <= res.data[i].suggestedPeople)
               order_status = 1;
 
             let time_status = that.getTimeStatus(res.data[i]);
@@ -211,8 +199,7 @@ Page({
               order_time: res.data[i].startTime + " - " + res.data[i].endTime, 
               order_status: order_status, 
               time_status : time_status, 
-              user_order_status: 0,
-              orderRatio: "剩余:" + (Number(res.data[i].suggestedPeople) - Number(res.data[i].orderedPeople)),
+              user_order_status: 0
             };
             tmplistData.push(curr);
 
@@ -221,8 +208,6 @@ Page({
             listData : tmplistData,
             spotOrderTimeList : res.data
           });
-          console.log("listData");
-          console.log(that.data.listData);
       }
     })
   },
@@ -233,7 +218,7 @@ Page({
     //load the available time
     wx.request({
       //placeIndex + 1 because the major key in database start from index = 1
-      url: app.globalData.url + "/wish/listSpotWishTime?date=" + that.data.date + "&spotId=" + UrlplaceIndex,
+      url: app.globalData.url + "/wish/listSpotWishTime?spotId=" + UrlplaceIndex,
       method: 'GET',
       success: (res) =>{
           //using spotOrderTimeList to update listData
@@ -245,8 +230,7 @@ Page({
               order_time: res.data[i].startTime + " - " + res.data[i].endTime, 
               order_status: 1, 
               time_status : time_status, 
-              user_order_status: 0,
-              orderRatio: "想去:" + Number(res.data[i].wishedPeople) +'/' + Number(res.data[i].suggestedPeople),
+              user_order_status: 0
             };
             tmplistData.push(curr);
 
@@ -359,14 +343,8 @@ Page({
    
   },
   onclickorder2: function(e){
-    let value = e.currentTarget.dataset.value;
-    let toastText = '';
-    if(this.data.listData[value].order_status == '0')
-      toastText = '此时段预约已满:(';
-    else
-      toastText = '此时段不可预约:(';
     wx.showToast({
-      title: toastText,
+      title: '此时段不可预约:(',
       icon: 'none'
     })
   },
@@ -377,15 +355,6 @@ Page({
 
       //check login state
       that.checkLogin();
-  },
-
-  onclickinfo : function(e){
-    let that = this;
-
-    let spotId = Number(that.data.placeIndex) + 1;//spotId
-    wx.navigateTo({
-      url: '/pages/history/history?spotId='+spotId,
-    })
   },
 
   //SET DATE

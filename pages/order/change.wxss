@@ -63,61 +63,20 @@
 }
 
 .outter .item .order_button{
-  /*float: right;
+  /* float: right;
   margin-right: 30rpx; */
-  display: inline-block;
-  margin-bottom: 40rpx;
-  margin-left: 80rpx;
-  margin-right: 45rpx;
+  margin-bottom: 20rpx;
+  margin-left: 75rpx;
+  margin-right: 55rpx;
   float: left;
   line-height: 100rpx;
 }
 
-.outter .item .order_button .detail-time{
-  padding-top: 10rpx;
-}
-
-.outter .item .order_button .detail-info{
-  font-size: 25rpx;
-}
-
-/* .outter .submit-view .submit{
+.outter .submit-view .submit{
   display: inline-block;
   margin:50rpx 70rpx 30rpx;
   width: 80%;
   border-radius: 25rpx;
-} */
-
- .outter .submit-view {
-  /* display: flex; */
-}
-<<<<<<< HEAD
-=======
-
-/* .outter .submit{
-  display: inline-block;
-  margin:50rpx 70rpx 30rpx;
-  width: 80%;
-  border-radius: 25rpx;
-} */
-
-.outter .btn-info{
-  display: inline-block;
-  padding-left: 75rpx;
-  padding-right: 10rpx;
-  padding-top: 60rpx;
-  border-radius: 25rpx;
-  width: 35%;
-}
-
-.outter .btn-submit{
-  display: inline-block;
-  padding-top: 60rpx;
-  padding-left: 70rpx;
-  border-radius: 25rpx;
-  width: 35%;
 }
 
 
-
->>>>>>> 7ebd234ee3bc9989a38017cacaf320c5b5d6b1a2

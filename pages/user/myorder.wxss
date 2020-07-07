@@ -1,46 +1,71 @@
 /* pages/user/myorder.wxss */
-.first_tab .orders_item {
+page {
+  height: 100%;
+}
+.all_orders {
+  height: 100%;
+  margin-top: 20rpx;
+  display: flex;
+}
+.all_orders .side_bar {
+  flex: 1;
+}
+.all_orders .first_tab {
+  flex: 6;
+  margin-left: 20rpx;
+  width: 70%;
+}
+.all_orders .first_tab .fail_wrap {
+  height: 100%;
+  margin-top: 50%;
+  text-align: center;
+  font-size: 35rpx;
+  color: #6d6d6d;
+}
+.all_orders .first_tab .orders_item {
   display: flex;
   border-bottom: 3rpx solid #ccc;
   padding: 30rpx;
 }
-.first_tab .orders_item .orders_info_wrap {
-  flex: 3;
+.all_orders .first_tab .orders_item .orders_info_wrap {
+  flex: 5;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-left: 30rpx;
+  margin-left: 10rpx;
 }
-.first_tab .orders_item .orders_info_wrap .order_name {
+.all_orders .first_tab .orders_item .orders_info_wrap .order_name {
   display: -webkit-box;
   overflow: hidden;
   -webkit-box-origin: vertical;
-  font-size: 35rpx;
+  font-size: 28rpx;
+  text-align: center;
 }
-.first_tab .orders_item .orders_time_wrap {
+.all_orders .first_tab .orders_item .orders_time_wrap {
   display: flex;
-  flex: 3;
+  flex: 5;
   flex-direction: column;
   justify-content: space-around;
-  margin-left: 25rpx;
+  margin-left: 30rpx;
 }
-.first_tab .orders_item .orders_time_wrap .order_date {
+.all_orders .first_tab .orders_item .orders_time_wrap .order_date {
   display: -webkit-box;
   overflow: hidden;
   -webkit-box-origin: vertical;
-  font-size: 35rpx;
+  font-size: 25rpx;
 }
-.first_tab .orders_item .orders_time_wrap .order_time {
+.all_orders .first_tab .orders_item .orders_time_wrap .order_time {
   display: -webkit-box;
   color: red;
   overflow: hidden;
   -webkit-box-origin: vertical;
-  font-size: 35rpx;
+  font-size: 25rpx;
 }
-.first_tab .orders_item .orders_time_wrap .order_People {
+.all_orders .first_tab .orders_item .orders_time_wrap .order_People {
   color: #4b87ee;
-  font-size: 30rpx;
+  font-size: 25rpx;
 }
-.first_tab .orders_item .delete_wrap {
+.all_orders .first_tab .orders_item .delete_wrap {
+  margin-top: 20rpx;
   flex: 1;
 }

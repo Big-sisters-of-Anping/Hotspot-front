@@ -92,7 +92,21 @@
 					"id": 4,
 					"name": "我的预约",
 					"pathName": "pages/user/myorder",
-					"query": "userName=Starry",
+					"query": "userId=117&tabNum=order&sideTabNum=1",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "test",
+					"pathName": "pages/user/test",
+					"query": "userName=Starry&tabNum=0",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "更改",
+					"pathName": "pages/order/change",
+					"query": "spotId=1",
 					"scene": null
 				}
 			]

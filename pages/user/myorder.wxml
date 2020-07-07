@@ -1,43 +1,64 @@
 <!--pages/user/myorder.wxml-->  
 <!-- 监听自定义事件 -->
-<Tabs tabs="{{tabs}}" bindTabsItemChange="handleTabsItemChange">
-  <block wx:if="{{tabs[0].isActive}}">
+
+<van-tabs active="{{active}}" bind:change="onChange">
+<!------------ 我的预约 ------------>
+<van-tab title="我的预约" name="order">
+  <view class="all_orders">
+
+    <!-- 侧边导航栏 -->
+    <view class="side_bar">
+      <van-sidebar active-key="{{ activeKey }}" bind:change="onSideBarChange">
+        <van-sidebar-item title="审核中" dot /> 
+        <van-sidebar-item title="已通过" dot="5" />
+        <van-sidebar-item title="未通过" dot="99+" />
+      </van-sidebar>
+    </view>
+    <van-notify id="van-notify" />
+
+    <!-- 右边预约信息 -->
     <view wx:if="{{ordersList.length>0}}" class="first_tab">
         <view class="orders_item"
         wx:for="{{ordersList}}"
         wx:key="orderId">
         <!-- 左侧 预约地点名 -->
           <view class="orders_info_wrap">
-            <view class="order_name">{{index+1}} {{item.spotName}}</view>
-            <!-- <view class="order_name">游泳馆</view> -->
+            <view class="order_name">{{item.spotName}}</view>
           </view>
          <!-- 右侧 预约时间&人数 -->
-          <view class="orders_time_wrap">
-
+          <view class="orders_time_wrap" bindtap="handleEdit" data-spotid="{{item.spotId}}" data-orderitem="{{item}}">
             <view class="order_date">{{item.orderDate}}</view>
             <view class="order_time">{{item.startTime}}-{{item.endTime}}</view>
-            <!-- <view class="order_People">{{item.orderedPeople}}/{{item.suggestedPeople}}</view> -->
-            <view class="order_People">3 / 10</view>
+            <view class="order_People">{{item.orderedPeople}}/{{item.suggestedPeople}}</view>
           </view>
 
           <van-toast id="van-toast" />
-
-          <view class="icon-small-wrp delete_wrap" bindtap="handleDeleteOrder" data-orderid="{{item.orderId}}">
-            <icon class="icon-small" type="cancel" size="23"></icon>
+            <view class="icon-small-wrp delete_wrap" bindtap="onDialogShow" data-currid="{{item.orderId}}">
+            <icon class="icon-small" type="cancel" size="22"></icon>
           </view>
+
 
         </view>
     </view>
-    <view wx:else class="first_tab">暂无预约</view>
-  </block>
-  <block wx:elif="{{tabs[1].isActive}}">
+    <view wx:else class="first_tab">
+      <view class="fail_wrap">
+        <text>暂无预约</text>
+      </view>
+    </view>
+  </view>
+
+</van-tab>
+
+<!---------- 我的想去 ------------->
+  <van-tab title="我的想去" name="wish">
+  <view class="all_orders">
    <view wx:if="{{wishesList.length>0}}" class="first_tab">
       <view class="orders_item"
         wx:for="{{wishesList}}"
         wx:key="wishId">
         <!-- 左侧 预约地点名 -->
           <view class="orders_info_wrap">
-            <view class="order_name">{{index+1}} {{item.spotName}}</view>
+            <view class="order_name">{{index+1}}  {{item.spotName}}</view>
             <!-- <view class="order_name">游泳馆</view> -->
           </view>
          <!-- 右侧 预约时间&人数 -->
@@ -47,12 +68,30 @@
             <view class="order_time">{{item.startTime}}-{{item.endTime}}</view>
           </view>
           <van-toast id="van-toast" />
-          <view class="icon-small-wrp delete_wrap" bindtap="handleDeleteWish" data-wishid="{{item.wishId}}">
+          <view class="icon-small-wrp delete_wrap" bindtap="onDialogShow" data-currid="{{item.wishId}}">
               <icon class="icon-small" type="cancel" size="23"></icon>
           </view>
       </view>
     </view>
-    <view wx:else class="first_tab">暂无想去地点</view>
-  </block>
+    <view wx:else class="first_tab">
+      <view class="fail_wrap">
+        <text>你还没有想去的地点哦</text>
+      </view>
+    </view>
+   </view>
+  </van-tab>
+</van-tabs>
 
-</Tabs>
+
+  <!-- 弹出框 -->
+  <van-dialog
+    use-slot 
+    title="确认取消吗？"
+    show="{{ dialogShow }}"
+    show-cancel-button
+    confirm-button-color="red"
+    bind:close="onClose"
+    bind:confirm="handleCancel"
+  >
+  </van-dialog>
+ 
