@@ -91,8 +91,6 @@
  .outter .submit-view {
   /* display: flex; */
 }
-<<<<<<< HEAD
-=======
 
 /* .outter .submit{
   display: inline-block;
@@ -117,7 +115,3 @@
   border-radius: 25rpx;
   width: 35%;
 }
-
-
-
->>>>>>> 7ebd234ee3bc9989a38017cacaf320c5b5d6b1a2
