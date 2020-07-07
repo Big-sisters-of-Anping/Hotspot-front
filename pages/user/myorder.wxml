@@ -26,7 +26,7 @@
             <view class="order_name">{{item.spotName}}</view>
           </view>
          <!-- 右侧 预约时间&人数 -->
-          <view class="orders_time_wrap" bindtap="handleEdit" data-spotid="{{item.spotId}}" data-orderitem="{{item}}">
+          <view class="orders_time_wrap" bindtap="handleOrderEdit" data-spotid="{{item.spotId}}" data-orderitem="{{item}}">
             <view class="order_date">{{item.orderDate}}</view>
             <view class="order_time">{{item.startTime}}-{{item.endTime}}</view>
             <view class="order_People">{{item.orderedPeople}}/{{item.suggestedPeople}}</view>
@@ -62,7 +62,7 @@
             <!-- <view class="order_name">游泳馆</view> -->
           </view>
          <!-- 右侧 预约时间&人数 -->
-          <view class="orders_time_wrap">
+          <view class="orders_time_wrap" bindtap="handleWishEdit" data-spotid="{{item.spotId}}" data-wishitem="{{item}}">
 
             <view class="order_date">{{item.wishDate}}</view>
             <view class="order_time">{{item.startTime}}-{{item.endTime}}</view>

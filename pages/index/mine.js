@@ -74,7 +74,7 @@ Page({
     console.log(that.data.userinfo);
     wx.navigateTo({
       //note that absolute path should be used to avoid ERROR
-      url: "/pages/user/myorder?userId="+that.data.userId+"&tabNum=0&sideTabNum=1",
+      url: "/pages/user/myorder?userId="+that.data.userId+"&tabNum=order&sideTabNum=1",
       events:{
         //to be done, get info from pages/order
       }
@@ -86,7 +86,7 @@ Page({
     console.log(that.data.userinfo);
     wx.navigateTo({
       //note that absolute path should be used to avoid ERROR
-      url: "/pages/user/myorder?userId="+that.data.userId+"&tabNum=1",
+      url: "/pages/user/myorder?userId="+that.data.userId+"&tabNum=wish",
       events:{
         //to be done, get info from pages/order
       }

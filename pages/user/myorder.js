@@ -24,7 +24,7 @@ Page({
   //切换tab
   onChange(event) {
     var that = this;
-    that.data.active = event.detail.index;
+    that.data.active = (event.detail.index == 0?'order':'wish');
     console.log(that.data.active)
   },
 
@@ -47,11 +47,14 @@ Page({
       userId:options.userId,
       active:options.tabNum
     })
-    if(that.data.active==0){
+    if(that.data.active=="order"){
       that.setData({activeKey:options.sideTabNum})
     }
-    that.getOrders(that.data.activeKey);
     console.log(that.data.active)
+  },
+  onShow: function(){
+    var that = this;
+    that.getOrders(that.data.activeKey);
       wx.request({
         url: app.globalData.url + "/wish/listUserWishes?userId=" + that.data.userId,
         method: 'GET',
@@ -65,7 +68,7 @@ Page({
                 "startTime": wish.wishTime.startTime,
                 "wishDate": wish.wishDate,
                 "wishId": wish.wishId,
-                "spotId": wish.wishTime.sspotId,
+                "spotId": wish.wishTime.spotId,
                 "spotName":wish.wishTime.spotName,
                 "userId": wish.userId
               };
@@ -118,8 +121,8 @@ Page({
     let orderId = that.data.currId;
     console.log("orderId "+ orderId);
     wx.request({
-      url: app.globalData.url + "/order/cancelOrder?orderId="+orderId,
-      method: 'GET',
+      url: app.globalData.url + "/order/deleteOrder?orderId="+orderId,
+      method: 'DELETE',
       headers:{
         'content-type': 'application/json' // 默认值 
       },
@@ -137,6 +140,7 @@ Page({
             // wx.navigateBack({
             //   complete: (res) => {},
             // })
+            // this.onShow();
              wx.navigateTo({
               //note that absolute path should be used to avoid ERROR
               url: "/pages/user/myorder?userId="+that.data.userId+"&tabNum=order&sideTabNum="+that.data.activeKey,
@@ -176,6 +180,7 @@ Page({
             // wx.navigateBack({
             //   complete: (res) => {},
             // })
+            // this.onShow();
              wx.navigateTo({
               //note that absolute path should be used to avoid ERROR
               url: "/pages/user/myorder?userId="+that.data.userId+"&tabNum=wish",
@@ -189,7 +194,7 @@ Page({
     })
   },
   handleCancel(event){
-    if (this.data.active==0)this.handleDeleteOrder();
+    if (this.data.active=="order")this.handleDeleteOrder();
     else this.handleDeleteWish();
   },
   onDialogShow(event) {
@@ -205,13 +210,28 @@ Page({
       dialogShow: false
     })
   },
-  handleEdit: function(e){
+  handleOrderEdit: function(e){
     console.log(e);
     let spotId = Number(e.currentTarget.dataset.spotid) - 1;
-    let orderitem = e.currentTarget.dataset.orderitem;
     let orderBean = JSON.stringify(spotId);
+    let userId =this.data.userId;
+    let curitem = e.currentTarget.dataset.orderitem;
+    let orderItem = JSON.stringify(curitem);
+
     wx.navigateTo({
-      url: "/pages/order/change?orderBean=" + orderBean + "&orderitem=" + orderitem
+      url: "/pages/order/change?orderBean=" + orderBean + "&orderItem=" + orderItem +"&userId=" + userId
     })
   },
+  handleWishEdit: function(e){
+    console.log(e);
+    let spotId = Number(e.currentTarget.dataset.spotid) - 1;
+    let orderBean = JSON.stringify(spotId);
+    let userId =this.data.userId;
+    let curitem = e.currentTarget.dataset.wishitem;
+    let orderItem = JSON.stringify(curitem);
+
+    wx.navigateTo({
+      url: "/pages/order/change?orderBean=" + orderBean + "&orderItem=" + orderItem +"&userId=" + userId
+    })
+  }
 })
