@@ -149,13 +149,14 @@ Page({
                   "name": spot.spotName,
                   "iconPath": iconPath,
                   "callout": {
-                    content: spot.spotName + "\n实时人数/建议人数上限：" + spot.realtimePeople + " / " + spot.suggestedPeople,
+                    content: spot.spotName + "\n实时人数/建议人数：" + spot.realtimePeople + " / " + spot.suggestedPeople,
                     display: "BYCLICK",
                     borderRadius: 5,
                     borderWidth: 1,
                     bgColor:"#FFFFFF",
                     padding: 5,
                     anchorY: 5,   
+                    textAlign: "center",
                   }
                 };
                 currMarkers.push(currMark);

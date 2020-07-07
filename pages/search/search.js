@@ -138,7 +138,10 @@ Page({
           var toastText = "获取数据失败，请稍后重试";
           Toast.fail(toastText);
         } else {
-          //navigate to search page
+          that.setData({
+            'inputValue' : '',
+        })
+        
           console.log(res.data);
           var searchBean = res.data;
           //set img url

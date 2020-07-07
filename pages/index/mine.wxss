@@ -130,11 +130,15 @@ page {
   position: relative;
 }
 .user_info_wrap .login_img_wrap .login_bg {
-  margin-top: -38rpx;
+  /* margin-top: -38rpx;
   height: 75vh;
   width: 75vh;
-  margin-left: -30rpx;
+  margin-left: -30rpx; */
   /* filter: blur(10px); */
+  height: 260rpx;
+  width: 260rpx;
+  margin-top: 150rpx;
+  margin-left: 245rpx;
 }
 .user_info_wrap .login_img_wrap .login_info {
   position: absolute;
@@ -144,7 +148,12 @@ page {
   text-align: center;
 }
 .user_info_wrap .login_img_wrap .login_info .login_name {
-  color: #fff;
+  /* color: #fff; 
   margin-top: 40rpx;
   font-size: 35rpx ;
+  */
+  color: #767171;
+  margin-top: 265rpx;
+  font-size: 30rpx;
+
 }

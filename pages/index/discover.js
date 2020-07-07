@@ -94,18 +94,18 @@ Page({
 
   //when scroll to the top
   upper: function () {
-    wx.showNavigationBarLoading()
-    this.refresh();
-    console.log("upper");
-    setTimeout(function(){wx.hideNavigationBarLoading();wx.stopPullDownRefresh();}, 2000);
+    // wx.showNavigationBarLoading()
+    // this.refresh();
+    // console.log("upper");
+    // setTimeout(function(){wx.hideNavigationBarLoading();wx.stopPullDownRefresh();}, 2000);
   },
 
   //when scroll to the button
   lower: function (e) {
-    wx.showNavigationBarLoading();
-    var that = this;
-    setTimeout(function(){wx.hideNavigationBarLoading();that.nextLoad();}, 1000);
-    console.log("lower")
+    // wx.showNavigationBarLoading();
+    // var that = this;
+    // setTimeout(function(){wx.hideNavigationBarLoading();that.nextLoad();}, 1000);
+    // console.log("lower")
   },
 
     //使用本地 fake 数据实现刷新效果
@@ -166,6 +166,9 @@ Page({
           Toast.fail(toastText);
         } else {
           //navigate to search page
+          that.setData({
+              'inputValue' : '',
+          })
           console.log(res.data);
           var searchBean = JSON.stringify(res.data);
           wx.navigateTo({

@@ -8,7 +8,7 @@
     </view>
   </view>
   <view wx:else class="login_img_wrap">
-    <image class="login_bg" src='../../images/login_bg.jpg'></image>
+    <image class="login_bg" src='../../images/logo.png'></image>
     <view class="login_info">
       <cover-view class="login_name">登录将获得你的公开信息（昵称、头像等）</cover-view>
     </view>

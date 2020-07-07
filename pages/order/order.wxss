@@ -63,13 +63,22 @@
 }
 
 .outter .item .order_button{
-  /* float: right;
+  /*float: right;
   margin-right: 30rpx; */
-  margin-bottom: 20rpx;
-  margin-left: 75rpx;
-  margin-right: 55rpx;
+  display: inline-block;
+  margin-bottom: 40rpx;
+  margin-left: 80rpx;
+  margin-right: 45rpx;
   float: left;
   line-height: 100rpx;
+}
+
+.outter .item .order_button .detail-time{
+  padding-top: 10rpx;
+}
+
+.outter .item .order_button .detail-info{
+  font-size: 25rpx;
 }
 
 /* .outter .submit-view .submit{
@@ -93,18 +102,16 @@
 .outter .btn-info{
   display: inline-block;
   padding-left: 75rpx;
-  padding-top: 70rpx;
+  padding-right: 10rpx;
+  padding-top: 60rpx;
   border-radius: 25rpx;
   width: 35%;
 }
 
 .outter .btn-submit{
   display: inline-block;
-  padding-top: 70rpx;
+  padding-top: 60rpx;
   padding-left: 70rpx;
   border-radius: 25rpx;
   width: 35%;
 }
-
-
-

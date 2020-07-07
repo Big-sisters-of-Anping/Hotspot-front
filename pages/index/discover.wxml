@@ -3,7 +3,7 @@
   <view class="search flex-wrp">
       <view class="search-left flex-item">
           <image src="../../images/search.png"></image>
-          <input placeholder="搜索地点" placeholder-class="search-placeholder" bindconfirm='goSearch'/>
+          <input placeholder="搜索地点" placeholder-class="search-placeholder" value = "{{inputValue}}" bindconfirm='goSearch'/>
       </view>
   </view>
   <!-- <mp-searchbar bindselectresult="selectResult" search="{{search}}"></mp-searchbar> -->
