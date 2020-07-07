@@ -38,6 +38,8 @@ App({
     spotList:[],
     naviBean: 0,
     userId : '0',
+    color_info: "#1989FA",
+    color_wish: "#F9619E",
   },
 
     onLaunch: function () {

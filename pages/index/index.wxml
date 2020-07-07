@@ -17,7 +17,7 @@
     >
     <cover-view class="order-cover-view">
     <!-- <van-icon name="like" class="like-icon"/> -->
-    <van-button round icon="{{btn_img}}" type="info" bindtap="onclickorder">{{btn_words}}</van-button>
+    <van-button round icon="{{btn_img}}" type="info" color = "{{btn_color}}" bindtap="onclickorder">{{btn_words}}</van-button>
     </cover-view>
     </map>
   </view>

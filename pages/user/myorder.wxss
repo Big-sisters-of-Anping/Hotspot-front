@@ -26,7 +26,13 @@ page {
   display: flex;
   border-bottom: 3rpx solid #ccc;
   padding: 30rpx;
+  width: 85%;
 }
+
+.all_orders .first_tab .orders_item_wish {
+  padding-left: 60rpx;
+}
+
 .all_orders .first_tab .orders_item .orders_info_wrap {
   flex: 5;
   display: flex;

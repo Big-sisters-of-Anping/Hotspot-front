@@ -29,7 +29,7 @@
           <view class="orders_time_wrap" bindtap="handleOrderEdit" data-spotid="{{item.spotId}}" data-orderitem="{{item}}">
             <view class="order_date">{{item.orderDate}}</view>
             <view class="order_time">{{item.startTime}}-{{item.endTime}}</view>
-            <view class="order_People">{{item.orderedPeople}}/{{item.suggestedPeople}}</view>
+            <!-- <view class="order_People">{{item.orderedPeople}}/{{item.suggestedPeople}}</view> -->
           </view>
 
           <van-toast id="van-toast" />
@@ -53,7 +53,7 @@
   <van-tab title="我的想去" name="wish">
   <view class="all_orders">
    <view wx:if="{{wishesList.length>0}}" class="first_tab">
-      <view class="orders_item"
+      <view class="orders_item orders_item_wish"
         wx:for="{{wishesList}}"
         wx:key="wishId">
         <!-- 左侧 预约地点名 -->

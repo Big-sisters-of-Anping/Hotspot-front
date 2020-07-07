@@ -36,7 +36,9 @@ Page({
     spotWishTimeList: [],
     submit_type : "预约",//
     btn_img : "clock",
-    placeType: '0'
+    placeType: '0',
+    isModify: false,
+    btn_color: app.globalData.color_info,
   },
   /**
    * 生命周期函数--监听页面加载
@@ -54,13 +56,15 @@ Page({
         })
     }
     // console.log(options.orderItem)
+    //jump from mine.js page
     if (options.orderItem != null){
       var curOrder = JSON.parse(options.orderItem);
       
       that.setData({
         curOrder: curOrder,
         userId: options.userId,
-        submit_type: "修改"
+        submit_type: "修改",
+        isModify: true,
       })
       console.log(that.data.submit_type)
     }
@@ -141,18 +145,28 @@ Page({
       console.log("order spot");
       console.log(app.globalData.spotList[spotIndex].spotName);
       that.getSpotOrderTime();
+
+      let submit_text  = "预约";
+      if(that.data.isModify)
+        submit_text = "修改";
       that.setData({
-        submit_type : "预约",
+        submit_type : submit_text,
         btn_img : "clock",
+        btn_color: app.globalData.color_info
       })
     }else{
       //wish
       console.log("wish spot");
       console.log(app.globalData.spotList[spotIndex].spotName);
       that.getSpotWishTime();
+
+      let submit_text  = "想去";
+      if(that.data.isModify)
+        submit_text = "修改";
       that.setData({
-        submit_type : "想去",
+        submit_type : submit_text,
         btn_img : "like",
+        btn_color: app.globalData.color_wish
       })
     }
   },
@@ -486,8 +500,12 @@ Page({
       let arr = dur.split(" - ");
       console.log("arr "+ arr);
 
+      let orderUrlPara = "/order/addOrder";
+      let currentDate = util.formatTime(new Date()).split(' ')[0];
+      if(that.data.date == currentDate)//should use FIFO as the order date = today
+        orderUrlPara = "/order/addFIFOOrder";
       wx.request({
-        url: app.globalData.url + "/order/addFIFOOrder",//addOrder to be done
+        url: app.globalData.url + orderUrlPara,//addOrder to be done
         method: 'POST',
         data: {
           "orderDate": that.data.date,

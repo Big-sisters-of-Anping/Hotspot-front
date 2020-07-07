@@ -46,14 +46,14 @@
       <block wx:if="{{item.order_status == 1 && item.time_status == 0}}">
         <block wx:if="{{item.user_order_status == 0}}">
             <van-button plain class = "order_button" type="info"  size="normal" block data-value="{{index}}" bindtap="onclickorder1">
-              <text class= "detail-time">{{item.order_time}}\n</text>
-              <text class = "detail-info">{{item.orderRatio}}</text>
+              <text class= "detail-time"> {{item.order_time}}\n</text>
+              <text class = "detail-info" > {{item.orderRatio}}</text>
             </van-button>
         </block>
         <block wx:else>
-            <van-button class = "order_button" type="info"  size="normal" block data-value="{{index}}" bindtap="onclickorder1">
-              <text class= "detail-time">{{item.order_time}}\n</text>
-              <text class = "detail-info">{{item.orderRatio}}</text>
+            <van-button class = "order_button" type="info"  size="normal"  block data-value="{{index}}" bindtap="onclickorder1">
+              <text class= "detail-time" >{{item.order_time}}\n</text>
+              <text class = "detail-info" >{{item.orderRatio}}</text>
             </van-button>
         </block>
       
@@ -73,7 +73,7 @@
 <van-toast id="van-toast" />
 
 <block class = "submit-view">
-<van-button round icon = "todo-list-o" class = "btn-info" type = "info"  block bindtap="onclickinfo">历史数据</van-button>
-<van-button round icon = "{{btn_img}}" class = "btn-submit" type = "info"  block bindtap="onclicksubmit">{{submit_type}}</van-button>
+<van-button round icon = "todo-list-o" class = "btn-info" type = "info" block bindtap="onclickinfo">历史数据</van-button>
+<van-button round icon = "{{btn_img}}" class = "btn-submit" type = "info" color = "{{btn_color}}"  block bindtap="onclicksubmit">{{submit_type}}</van-button>
 </block>
 </view>
