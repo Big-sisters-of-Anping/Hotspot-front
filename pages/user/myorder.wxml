@@ -9,9 +9,9 @@
     <!-- 侧边导航栏 -->
     <view class="side_bar">
       <van-sidebar active-key="{{ activeKey }}" bind:change="onSideBarChange">
-        <van-sidebar-item title="审核中" dot /> 
-        <van-sidebar-item title="已通过" dot="5" />
-        <van-sidebar-item title="未通过" dot="99+" />
+        <van-sidebar-item title="审核中"  /> 
+        <van-sidebar-item title="已通过"  />
+        <van-sidebar-item title="未通过"  />
       </van-sidebar>
     </view>
     <van-notify id="van-notify" />

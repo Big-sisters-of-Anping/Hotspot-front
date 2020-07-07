@@ -1,0 +1,10 @@
+/* pages/developer/developer.wxss */
+page{
+  background-color: rgb(247, 245, 245);
+}
+.info_wrap{
+  padding: 52rpx;
+  margin-top: 50rpx;
+  font-size: 30rpx;
+  color: rgb(75, 75, 75);
+}

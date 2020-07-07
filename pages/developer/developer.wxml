@@ -1,0 +1,4 @@
+<!--pages/developer/developer.wxml-->
+<view class="info_wrap">
+  <text>{{info}}</text>
+</view>

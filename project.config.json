@@ -96,9 +96,9 @@
 					"scene": null
 				},
 				{
-					"id": -1,
-					"name": "test",
-					"pathName": "pages/user/test",
+					"id": 5,
+					"name": "pages/developer/developer",
+					"pathName": "pages/developer/developer",
 					"query": "userName=Starry&tabNum=0",
 					"scene": null
 				},

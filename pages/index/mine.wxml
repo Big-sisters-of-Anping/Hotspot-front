@@ -29,11 +29,11 @@
 
       <!-- 我的信息  -->
       <view class="user_info"> 
-        我的HotSpot
+        <!-- 我的HotSpot -->
       </view>
       <!-- 我的预约 -->
       <view class="button_wrap">
-        <van-button round icon="clock" type="info" class="mini-btn" bindtap="onclickMyOrder">
+        <van-button round icon="clock" type="info" class="mini-btn" bindtap="onclickMyOrder" >
         我的预约
         </van-button>
          <mp-badge content="99+" style="position: absolute;top: -.4em;right: -.4em;"/>
@@ -48,10 +48,10 @@
         <text>联系我们</text>
         <text>025-233-6000</text>
       </view>
-      <view class="app_info_item">关于我们</view>
+      <navigator url="../developer/developer" class="app_info_item" >关于我们</navigator>
     </view>
     <!-- 推荐 -->
-    <view class="recommend_wrap">分享Hotspot给更多人</view>
+    <button class="recommend_wrap" open-type="share">分享Hotspot给更多人</button>
   </view>
   <view wx:else class="user_btn">
     <!-- <navigator url="../login/index">登陆</navigator> -->

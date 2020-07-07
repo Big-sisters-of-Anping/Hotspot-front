@@ -1,6 +1,6 @@
 page {
   background-color: #edece8;
-  overflow:hidden;
+    overflow:hidden;
 }
 .user_info_wrap {
   height: 45vh;
@@ -60,8 +60,8 @@ page {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 15rpx;
-  border-bottom: 0.5rpx solid #ccc;
+  padding: 0rpx;
+  /* border-bottom: 0.5rpx solid #ccc; */
 }
 .user_content .user_main .order_wrap .button_wrap {
   display: flex;
@@ -92,11 +92,14 @@ page {
 }
 .user_content .user_main .recommend_wrap {
   margin-top: 30rpx;
-  padding: 20rpx;
+  padding: 5rpx;
+  margin-left: 0rpx;
+  padding-left: 0rpx;
   background-color: #fff;
   color: #6d6d6b;
   font-size: small;
 }
+
 .user_content .user_btn {
   position: absolute;
   left: 50%;
@@ -130,15 +133,11 @@ page {
   position: relative;
 }
 .user_info_wrap .login_img_wrap .login_bg {
-  /* margin-top: -38rpx;
+  margin-top: -38rpx;
   height: 75vh;
   width: 75vh;
-  margin-left: -30rpx; */
+  margin-left: -30rpx;
   /* filter: blur(10px); */
-  height: 260rpx;
-  width: 260rpx;
-  margin-top: 150rpx;
-  margin-left: 245rpx;
 }
 .user_info_wrap .login_img_wrap .login_info {
   position: absolute;
@@ -148,12 +147,7 @@ page {
   text-align: center;
 }
 .user_info_wrap .login_img_wrap .login_info .login_name {
-  /* color: #fff; 
+  color: #fff;
   margin-top: 40rpx;
   font-size: 35rpx ;
-  */
-  color: #767171;
-  margin-top: 265rpx;
-  font-size: 30rpx;
-
 }

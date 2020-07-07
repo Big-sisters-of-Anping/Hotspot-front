@@ -7,7 +7,8 @@
     "pages/testvant/index",
     "pages/user/myorder",
     "pages/search/search",
-    "pages/history/history"
+    "pages/history/history",
+    "pages/developer/developer"
   ],
   "window": {
     "backgroundTextStyle": "light",
