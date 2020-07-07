@@ -6,6 +6,7 @@ Page({
    */
   data: {
     spotId: "1",
+    spotType: "0"
   },
 
   /**
@@ -14,9 +15,12 @@ Page({
   onLoad: function (options) {
     if(options.spotId != null){
       let spotId = JSON.parse(options.spotId);
+      let spotType = JSON.parse(options.spotType);
         console.log(spotId);
+        console.log(spotType);
         this.setData({
           spotId : spotId,
+          spotType : spotType
         })
     }
   },

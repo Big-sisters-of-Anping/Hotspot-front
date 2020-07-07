@@ -6,7 +6,7 @@ Page({
   data: {
     userinfo:{},
     currentTab: 1,
-    userId: 0,
+    userId: -1,
     naviBean : 0,//to distinguish the jump from order page
   },
   onLoad : function(options){
@@ -46,26 +46,28 @@ Page({
     })
 
     console.log(that.data.userId);
+    if (that.data.userId == -1){
       // signup 
       // 有“用户名不能为空！“的问题
-    wx.request({
-      url: app.globalData.url + "/user/signup",//addOrder to be done
-      method: 'POST',
-      data: {
-          // "userName": "Marry"
-          "userName": that.data.userinfo.nickName
-       },
-       headers:{
-         'content-type': 'application/json' // 默认值 
-       },
-       success(res){
-         console.log(res.data);
-         if (res.data.success == true){
-          that.setData({
-            userId: res.data.userId
-          })}
-       }
-      })
+      wx.request({
+        url: app.globalData.url + "/user/signup",//addOrder to be done
+        method: 'POST',
+        data: {
+            // "userName": "Marry"
+            "userName": that.data.userinfo.nickName
+        },
+        headers:{
+          'content-type': 'application/json' // 默认值 
+        },
+        success(res){
+          console.log(res.data);
+          if (res.data.success == true){
+            that.setData({
+              userId: res.data.userId
+            })}
+        }
+        })
+    }
   },
 
   onclickMyOrder: function(e){

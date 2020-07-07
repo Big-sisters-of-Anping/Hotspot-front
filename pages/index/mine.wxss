@@ -1,5 +1,6 @@
 page {
   background-color: #edece8;
+  overflow:hidden;
 }
 .user_info_wrap {
   height: 45vh;

@@ -34,6 +34,7 @@ Page({
     spotWishTimeList: [],
     submit_type : "预约",//
     btn_img : "clock",
+    placeType: '0'
   },
   /**
    * 生命周期函数--监听页面加载
@@ -167,6 +168,9 @@ Page({
     let spotList = app.globalData.spotList;
     let spotIndex = that.getIndexById(Number(this.data.placeIndex) + 1);//id start from 1
     let spotType = that.getSpotTypeById(Number(this.data.placeIndex) + 1);
+    that.setData({
+      placeType: spotType
+    })
    
     if(spotType == '1'){
       //order
@@ -371,10 +375,10 @@ Page({
 
   onclickinfo : function(e){
     let that = this;
-
+    let spotType = that.data.placeType;
     let spotId = Number(that.data.placeIndex) + 1;//spotId
     wx.navigateTo({
-      url: '/pages/history/history?spotId='+spotId,
+      url: '/pages/history/history?spotId='+spotId+'&spotType='+spotType,
     })
   },
 

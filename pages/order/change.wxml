@@ -11,7 +11,7 @@
 <view class="outter">
 
 <view class="section__title">
-    <view class="title-text">地点: {{placeArray[placeIndex]}}</view>
+    <view class="title-text">{{placeArray[placeIndex]}}</view>
 </view>
 <!-- <van-divider class="divider"/> -->
 <!-- <view class="divLine1"></view> -->
