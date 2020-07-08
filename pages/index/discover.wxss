@@ -145,3 +145,11 @@
 .container .feed-item .feed-content .answer-actions .dot ::after{
   content: "•";
 }
+
+.container .end-info{
+  display: inline-block;
+  margin-left: 260rpx;
+  margin-top: 5rpx;
+  font-size: 28rpx;
+  color: #5b5b5b;
+}

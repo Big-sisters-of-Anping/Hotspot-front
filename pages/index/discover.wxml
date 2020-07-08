@@ -40,6 +40,7 @@
         </view>
       </view>
     </block>
+    <text class = "end-info">没有更多内容了~</text>
   </scroll-view>
 
    

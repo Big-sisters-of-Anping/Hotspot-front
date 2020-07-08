@@ -464,7 +464,7 @@ Page({
            var toastText = "失败:(";
            //analysis errMsg
            if(res.data.errMsg.indexOf("Duplicate") != -1)
-             toastText = toastText + "\n 您已“想去”该时段，请前往个人中心查看";
+             toastText = toastText + "\n您已“想去”该时段，请前往个人中心查看";
 
            Toast.fail(toastText);
          } else {
