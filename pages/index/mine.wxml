@@ -33,11 +33,11 @@
       </view>
       <!-- 我的预约 -->
       <view class="button_wrap">
-        <van-button round icon="clock" type="info" class="mini-btn" bindtap="onclickMyOrder" >
+        <van-button round icon="clock" type="info" class="mini-btn" color = "{{order_color}}" bindtap="onclickMyOrder" >
         我的预约
         </van-button>
          <mp-badge content="99+" style="position: absolute;top: -.4em;right: -.4em;"/>
-        <van-button round icon="like" type="info"  class="mini-btn" bindtap="onclickMyWish">
+        <van-button round icon="like" type="info"  class="mini-btn" color = "{{wish_color}}" bindtap="onclickMyWish">
         我的想去
         </van-button>
       </view>

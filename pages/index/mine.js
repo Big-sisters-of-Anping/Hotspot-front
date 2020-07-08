@@ -9,7 +9,9 @@ Page({
     userinfo:{},
     currentTab: 1,
     userId: -1,
-    naviBean : 0,//to distinguish the jump from order page
+    naviBean: 0,//to distinguish the jump from order page
+    order_color: app.globalData.color_info,
+    wish_color: app.globalData.color_wish,
   },
   onLoad : function(options){
     var that = this;

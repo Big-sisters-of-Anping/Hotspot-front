@@ -23,12 +23,12 @@
 			"disablePlugins": [],
 			"outputPath": ""
 		},
-		"useCompilerModule": false,
+		"useCompilerModule": true,
 		"userConfirmedUseCompilerModuleSwitch": false
 	},
 	"compileType": "miniprogram",
 	"libVersion": "2.10.4",
-	"appid": "wx3853ce57bf5f9196",
+	"appid": "wx593894c971b8f6d4",
 	"projectname": "HotSpot",
 	"debugOptions": {
 		"hidedInDevtools": []
