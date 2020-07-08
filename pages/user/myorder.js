@@ -141,7 +141,7 @@ Page({
             //   complete: (res) => {},
             // })
             // this.onShow();
-             wx.navigateTo({
+             wx.redirectTo({
               //note that absolute path should be used to avoid ERROR
               url: "/pages/user/myorder?userId="+that.data.userId+"&tabNum=order&sideTabNum="+that.data.activeKey,
               events:{
@@ -181,7 +181,7 @@ Page({
             //   complete: (res) => {},
             // })
             // this.onShow();
-             wx.navigateTo({
+             wx.redirectTo({
               //note that absolute path should be used to avoid ERROR
               url: "/pages/user/myorder?userId="+that.data.userId+"&tabNum=wish",
               events:{
