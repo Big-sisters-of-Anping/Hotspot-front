@@ -119,7 +119,7 @@ Page({
     // console.log("lower")
   },
 
-    //使用本地 fake 数据实现刷新效果
+    //使用网络数据实现刷新效果
     refresh: function(){
       var feed = util.getDiscovery();
       console.log("loaddata");
