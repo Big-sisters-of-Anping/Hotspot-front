@@ -142,16 +142,16 @@ Page({
         });
   },
 
-    //使用本地 fake 数据实现继续加载效果
-    nextLoad: function(){
-      var next = util.discoveryNext();
-      console.log("continueload");
-      var next_data = next.data;
-      this.setData({
-        feed: this.data.feed.concat(next_data),
-        feed_length: this.data.feed_length + next_data.length
-      });
-  },
+  //   //使用网络数据实现继续加载效果
+  //   nextLoad: function(){
+  //     var next = util.discoveryNext();
+  //     console.log("continueload");
+  //     var next_data = next.data;
+  //     this.setData({
+  //       feed: this.data.feed.concat(next_data),
+  //       feed_length: this.data.feed_length + next_data.length
+  //     });
+  // },
 
   //search
   goSearch : function(e){
