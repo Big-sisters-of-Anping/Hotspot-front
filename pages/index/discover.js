@@ -1,7 +1,7 @@
 // pages/discover.js
 import Toast from '@vant/weapp/toast/toast';
 
-var util = require('../../utils/util.js');
+// var util = require('../../utils/util.js');
 var app = getApp();
 
 Page({
@@ -28,10 +28,21 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    console.log('onLoad')
-    var that = this
+    console.log('onLoad');
     //调用应用实例的方法获取全局数据
-    this.refresh();
+    // this.refresh();
+    // console.log(this.data.feed);
+    var that = this;
+    wx.request({
+      url: app.globalData.url + "/notice/listNotices",
+      method: 'GET',
+      success: (res)=>{
+        that.setData({
+          feed: res.data,
+          feed_length: res.data.length
+        })
+      }
+    });
   },
 
   /**
