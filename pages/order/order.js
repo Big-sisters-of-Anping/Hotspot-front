@@ -527,7 +527,7 @@ Page({
           var toastText = "预约失败:(";
           //analysis errMsg
           if(res.data.errMsg.indexOf("Duplicate") != -1)
-            toastText = toastText + "\n 已预约该时段！";
+            toastText = toastText + "\n已预约该时段";
           Toast.fail(toastText);
         } else {
           if(that.data.userId==-1){
