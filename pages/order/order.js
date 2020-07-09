@@ -546,6 +546,8 @@ Page({
         } else {
           if(that.data.userId==-1){
             var toastText = "预约成功:)";
+            if(that.data.date != currentDate)
+              toastText = "成功！预约正在审核中:)"
             Toast.success(toastText);
             setTimeout(function(){
               wx.navigateBack({
