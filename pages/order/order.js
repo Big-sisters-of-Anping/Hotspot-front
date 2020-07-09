@@ -75,6 +75,7 @@ Page({
     //set date to the current date & check current time
     if (options.orderItem == null)
         that.setDate();//it is only used when onLoad
+    that.setStartDate();
     
     // set placeArray
     var spotList = app.globalData.spotList;
@@ -390,6 +391,15 @@ Page({
     var arr = time.split(" ");
     that.setData({
       date : arr[0],
+    });
+  },
+
+  //set start date
+  setStartDate : function(){
+    var that = this;
+    var time = util.formatTime(new Date());
+    var arr = time.split(" ");
+    that.setData({
       startDate : arr[0],
     });
   },
