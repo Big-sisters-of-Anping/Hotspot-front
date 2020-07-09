@@ -138,7 +138,7 @@ Page({
               var currMarkers = [];
               spotList.forEach(spot => {
                 var iconPath = "/images/location-green.png";
-                if(spot.realtimePeople == spot.suggestedPeople){
+                if(spot.realtimePeople > spot.suggestedPeople *0.95){
                   iconPath = "/images/location-red.png";
                 }else if (spot.realtimePeople > spot.suggestedPeople * 0.75){
                   iconPath = "/images/location-yellow.png";
