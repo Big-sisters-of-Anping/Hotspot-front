@@ -194,8 +194,16 @@ naviToOrder : function(e){
 
 uploadLocation : function(){
   var that = this;
+  that.upLoad();
   setInterval(function () {
     //循环执行代码
+    that.upLoad();
+
+    },300000);//循环时间 unit:ms -> 5min 300000
+
+  },
+
+  upLoad : function(){
     wx.getLocation({
       success: (res) => {
         let latitude = res.latitude;
@@ -218,10 +226,7 @@ uploadLocation : function(){
         }
      }
     })
-
-    },300000);//循环时间 unit:ms -> 5min 300000
-
-  },
+  }
 
 })
 

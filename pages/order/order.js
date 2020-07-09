@@ -59,18 +59,22 @@ Page({
     //jump from mine.js page
     if (options.orderItem != null){
       var curOrder = JSON.parse(options.orderItem);
+      console.log("curOrder");
+      console.log(curOrder);
       
       that.setData({
         curOrder: curOrder,
         userId: options.userId,
         submit_type: "修改",
         isModify: true,
+        date: curOrder.orderDate,
       })
       console.log(that.data.submit_type)
     }
     
     //set date to the current date & check current time
-    that.setDate();//it is only used when onLoad
+    if (options.orderItem == null)
+        that.setDate();//it is only used when onLoad
     
     // set placeArray
     var spotList = app.globalData.spotList;
